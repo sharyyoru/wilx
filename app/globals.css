@@ -1,26 +1,104 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f4f1ea;
+  --foreground: #111111;
+  --accent-orange: #ff3d00;
+  --accent-yellow: #fbf719;
+  --accent-blue: #0044ff;
+  --accent-pink: #ff0055;
+  --paper: #f4f1ea;
+  --ink: #111111;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-accent-orange: var(--accent-orange);
+  --color-accent-yellow: var(--accent-yellow);
+  --color-accent-blue: var(--accent-blue);
+  --color-accent-pink: var(--accent-pink);
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --shadow-brutal: 8px 8px 0px 0px rgba(0, 0, 0, 1);
+  --shadow-brutal-sm: 4px 4px 0px 0px rgba(0, 0, 0, 1);
+  --shadow-brutal-lg: 12px 12px 0px 0px rgba(0, 0, 0, 1);
+  --shadow-brutal-orange: 8px 8px 0px 0px var(--accent-orange);
+  --shadow-brutal-blue: 8px 8px 0px 0px var(--accent-blue);
+  --shadow-brutal-pink: 8px 8px 0px 0px var(--accent-pink);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+@utility shadow-brutal {
+  box-shadow: 8px 8px 0px 0px rgba(0, 0, 0, 1);
+}
+
+@utility shadow-brutal-sm {
+  box-shadow: 4px 4px 0px 0px rgba(0, 0, 0, 1);
+}
+
+@utility shadow-brutal-lg {
+  box-shadow: 12px 12px 0px 0px rgba(0, 0, 0, 1);
+}
+
+@utility shadow-brutal-orange {
+  box-shadow: 8px 8px 0px 0px var(--accent-orange);
+}
+
+@utility shadow-brutal-blue {
+  box-shadow: 8px 8px 0px 0px var(--accent-blue);
+}
+
+@utility shadow-brutal-pink {
+  box-shadow: 8px 8px 0px 0px var(--accent-pink);
+}
+
+@utility border-brutal {
+  border-width: 4px;
+  border-color: var(--ink);
+}
+
+@utility border-brutal-2 {
+  border-width: 2px;
+  border-color: var(--ink);
+}
+
+@utility text-stroke {
+  -webkit-text-stroke: 2px var(--ink);
+}
+
+@utility text-stroke-thin {
+  -webkit-text-stroke: 1px var(--ink);
+}
+
+@utility paper-texture {
+  background-color: var(--paper);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  background-blend-mode: multiply;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+::selection {
+  background: var(--accent-yellow);
+  color: var(--ink);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

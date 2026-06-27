@@ -6,6 +6,7 @@ import {
   BentoCardTag,
   BentoCardTitle,
 } from "./components/BentoCard";
+import { DitherShaderBackground } from "./components/DitherShaderBackground";
 import { KineticText } from "./components/KineticText";
 import { Marquee } from "./components/Marquee";
 import { ScrollReveal, TextReveal } from "./components/ScrollReveal";
@@ -79,26 +80,20 @@ const aiProjectExamples = [
 
 export default function Home() {
   return (
-    <div className="relative flex min-h-screen flex-col paper-texture">
-      {/* Decorative noise grain overlay */}
-      <div
-        className="pointer-events-none fixed inset-0 z-50 opacity-[0.04]"
-        aria-hidden="true"
-      >
-        <div className="h-full w-full" />
-      </div>
+    <div className="relative flex min-h-screen flex-col bg-black text-white">
+      <DitherShaderBackground />
 
-      <main className="flex flex-1 flex-col">
+      <main className="relative z-10 flex flex-1 flex-col">
         {/* Hero Section */}
-        <section className="relative flex min-h-[90vh] flex-col justify-between border-b-4 border-ink px-4 py-8 sm:px-8 lg:px-12">
+        <section className="relative flex min-h-[90vh] flex-col justify-between border-b-4 border-white px-4 py-8 sm:px-8 lg:px-12">
           <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
             <div className="flex flex-wrap gap-3">
-              <span className="inline-block border-2 border-ink bg-paper px-3 py-1 text-xs font-bold uppercase tracking-wider shadow-brutal-sm">
+              <span className="inline-block border-2 border-white bg-black px-3 py-1 text-xs font-bold uppercase tracking-wider shadow-brutal-white-sm text-white">
                 Available for Select Projects
               </span>
               <a
                 href={`mailto:${EMAIL}`}
-                className="inline-block border-2 border-ink bg-paper px-3 py-1 text-xs font-bold uppercase tracking-wider shadow-brutal-sm transition-colors hover:bg-accent-yellow"
+                className="inline-block border-2 border-white bg-black px-3 py-1 text-xs font-bold uppercase tracking-wider shadow-brutal-white-sm transition-colors hover:bg-white hover:text-black"
               >
                 Contact: {EMAIL}
               </a>
@@ -118,14 +113,14 @@ export default function Home() {
               <TextReveal
                 text="Creative AI Solution Building Specialist."
                 tag="p"
-                className="text-xl font-bold uppercase tracking-tight text-ink sm:text-2xl md:text-3xl"
+                className="text-xl font-bold uppercase tracking-tight text-white sm:text-2xl md:text-3xl"
               />
               <div className="mt-6 flex flex-wrap items-center gap-4">
                 <a
                   href={GITHUB}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 border-2 border-ink bg-paper px-4 py-2 text-sm font-bold uppercase tracking-wider shadow-brutal-sm transition-colors hover:bg-accent-yellow"
+                  className="inline-flex items-center gap-2 border-2 border-white bg-black px-4 py-2 text-sm font-bold uppercase tracking-wider shadow-brutal-white-sm transition-colors hover:bg-white hover:text-black"
                 >
                   <svg
                     className="h-4 w-4"
@@ -141,7 +136,7 @@ export default function Home() {
                   href={LINKEDIN}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 border-2 border-ink bg-paper px-4 py-2 text-sm font-bold uppercase tracking-wider shadow-brutal-sm transition-colors hover:bg-accent-blue hover:text-white"
+                  className="inline-flex items-center gap-2 border-2 border-white bg-black px-4 py-2 text-sm font-bold uppercase tracking-wider shadow-brutal-white-sm transition-colors hover:bg-white hover:text-black"
                 >
                   <svg
                     className="h-4 w-4"
@@ -163,7 +158,7 @@ export default function Home() {
                 (item) => (
                   <span
                     key={item}
-                    className="border-2 border-ink bg-paper px-3 py-1 text-xs font-bold uppercase tracking-wider shadow-brutal-sm"
+                    className="border-2 border-white bg-black px-3 py-1 text-xs font-bold uppercase tracking-wider shadow-brutal-white-sm text-white"
                   >
                     {item}
                   </span>
@@ -184,7 +179,7 @@ export default function Home() {
               tag="h2"
               className="text-3xl font-black uppercase tracking-tight sm:text-4xl md:text-5xl"
             />
-            <span className="hidden h-4 flex-1 border-b-4 border-ink sm:ml-6 sm:block" />
+            <span className="hidden h-4 flex-1 border-b-4 border-white sm:ml-6 sm:block" />
           </div>
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-12 md:auto-rows-[minmax(220px,auto)]">
@@ -269,12 +264,12 @@ export default function Home() {
             <BentoCard
               colSpan={12}
               rowSpan={1}
-              color="paper"
+              color="dark"
               className="overflow-hidden p-0"
             >
               <div className="flex h-full flex-col">
-                <div className="flex items-center justify-between border-b-4 border-ink bg-paper p-4 sm:p-6">
-                  <BentoCardTitle className="mb-0">Tech Arsenal</BentoCardTitle>
+                <div className="flex items-center justify-between border-b-4 border-white bg-black p-4 sm:p-6">
+                  <BentoCardTitle className="mb-0 text-white">Tech Arsenal</BentoCardTitle>
                   <BentoCardTag>Always Evolving</BentoCardTag>
                 </div>
                 <div className="flex flex-1 items-center">
@@ -282,7 +277,8 @@ export default function Home() {
                     items={skills}
                     speed={25}
                     className="border-y-0"
-                    itemClassName="text-foreground"
+                    itemClassName="text-white"
+                    variant="dark"
                   />
                 </div>
               </div>
@@ -291,14 +287,14 @@ export default function Home() {
         </section>
 
         {/* AI Project Examples Section */}
-        <section className="border-t-4 border-ink bg-paper px-4 py-16 sm:px-8 lg:px-12">
+        <section className="border-t-4 border-white bg-black px-4 py-16 sm:px-8 lg:px-12">
           <div className="mb-8 flex items-center justify-between">
             <TextReveal
               text="AI Project Examples"
               tag="h2"
               className="text-3xl font-black uppercase tracking-tight sm:text-4xl md:text-5xl"
             />
-            <span className="hidden h-4 flex-1 border-b-4 border-ink sm:ml-6 sm:block" />
+            <span className="hidden h-4 flex-1 border-b-4 border-white sm:ml-6 sm:block" />
           </div>
 
           <p className="mb-8 max-w-3xl text-lg font-medium">
@@ -325,7 +321,7 @@ export default function Home() {
                   {project.tech.map((tech) => (
                     <span
                       key={tech}
-                      className="border-2 border-ink bg-paper px-2 py-1 text-xs font-bold uppercase text-ink shadow-brutal-sm"
+                      className="border-2 border-white bg-black px-2 py-1 text-xs font-bold uppercase text-white shadow-brutal-white-sm"
                     >
                       {tech}
                     </span>
@@ -346,7 +342,7 @@ export default function Home() {
         </section>
 
         {/* Contact Marquee */}
-        <section className="border-t-4 border-ink bg-paper">
+        <section className="border-t-4 border-white bg-black">
           <Marquee
             items={[
               "Let's Build Something Sharp",
@@ -356,25 +352,26 @@ export default function Home() {
               "Dubai, UAE",
             ]}
             speed={40}
-            itemClassName="text-foreground"
+            itemClassName="text-white"
             separator="◆"
+            variant="dark"
           />
         </section>
 
         {/* Footer */}
-        <footer className="border-t-4 border-ink bg-ink px-4 py-12 text-paper sm:px-8 lg:px-12">
+        <footer className="border-t-4 border-white bg-black px-4 py-12 text-white sm:px-8 lg:px-12">
           <div className="grid grid-cols-1 gap-8 md:grid-cols-12">
             <ScrollReveal className="md:col-span-6">
               <h3 className="mb-4 text-2xl font-black uppercase tracking-tight">
                 Wilson Ali
               </h3>
-              <p className="max-w-md text-paper/80">
+              <p className="max-w-md text-white/80">
                 Creative AI Solution Building Specialist. Technical Director.
                 Architect of AI-driven ecosystems.
               </p>
             </ScrollReveal>
             <ScrollReveal className="md:col-span-3" delay={0.1}>
-              <h4 className="mb-4 text-sm font-bold uppercase tracking-wider text-paper/60">
+              <h4 className="mb-4 text-sm font-bold uppercase tracking-wider text-white/60">
                 Connect
               </h4>
               <ul className="space-y-2 font-medium">
@@ -409,20 +406,20 @@ export default function Home() {
               </ul>
             </ScrollReveal>
             <ScrollReveal className="md:col-span-3" delay={0.2}>
-              <h4 className="mb-4 text-sm font-bold uppercase tracking-wider text-paper/60">
+              <h4 className="mb-4 text-sm font-bold uppercase tracking-wider text-white/60">
                 Location
               </h4>
               <p className="font-medium">Dubai, United Arab Emirates</p>
-              <p className="mt-2 text-sm text-paper/60">
+              <p className="mt-2 text-sm text-white/60">
                 Open to work · On-site / Hybrid
               </p>
             </ScrollReveal>
           </div>
-          <div className="mt-12 flex flex-col justify-between gap-4 border-t-2 border-paper/20 pt-6 sm:flex-row sm:items-center">
-            <p className="text-sm text-paper/60">
+          <div className="mt-12 flex flex-col justify-between gap-4 border-t-2 border-white/20 pt-6 sm:flex-row sm:items-center">
+            <p className="text-sm text-white/60">
               © {new Date().getFullYear()} Wilson Ali. All rights reserved.
             </p>
-            <p className="text-sm font-bold uppercase tracking-wider text-paper/60">
+            <p className="text-sm font-bold uppercase tracking-wider text-white/60">
               Built with Next.js + Tailwind + Framer Motion
             </p>
           </div>

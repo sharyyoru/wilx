@@ -13,12 +13,12 @@ export type BentoCardProps = {
 };
 
 const colorMap = {
-  paper: "bg-paper text-ink",
-  orange: "bg-accent-orange text-white",
-  yellow: "bg-accent-yellow text-ink",
-  blue: "bg-accent-blue text-white",
-  pink: "bg-accent-pink text-white",
-  dark: "bg-ink text-paper",
+  paper: "bg-paper text-ink border-ink shadow-brutal",
+  orange: "bg-black text-white border-white shadow-brutal-white",
+  yellow: "bg-black text-white border-white shadow-brutal-white",
+  blue: "bg-black text-white border-white shadow-brutal-white",
+  pink: "bg-black text-white border-white shadow-brutal-white",
+  dark: "bg-black text-white border-white shadow-brutal-white",
 };
 
 const colSpanClass: Record<number, string> = {
@@ -51,8 +51,11 @@ export function BentoCard({
   className,
   hover = "lift",
 }: BentoCardProps) {
+  const hoverShadowClass =
+    color === "paper" ? "hover:shadow-brutal-lg" : "hover:shadow-brutal-white-lg";
+
   const hoverClasses = {
-    lift: "hover:-translate-x-1 hover:-translate-y-1 hover:shadow-brutal-lg transition-transform",
+    lift: `hover:-translate-x-1 hover:-translate-y-1 ${hoverShadowClass} transition-transform`,
     tilt: "hover:rotate-1 transition-transform",
     none: "",
   };
@@ -60,7 +63,7 @@ export function BentoCard({
   return (
     <motion.div
       className={cn(
-        "relative overflow-hidden border-4 border-ink p-6 sm:p-8 shadow-brutal",
+        "relative overflow-hidden border-4 p-6 sm:p-8",
         colorMap[color],
         hoverClasses[hover],
         "flex flex-col col-span-1 row-span-1",

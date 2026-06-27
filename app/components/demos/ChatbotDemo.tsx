@@ -95,13 +95,13 @@ export function ChatbotDemo() {
   };
 
   return (
-    <div className="flex w-full flex-col border-4 border-ink bg-paper shadow-brutal">
-      <div className="flex items-center justify-between border-b-4 border-ink bg-ink p-3 text-paper">
+    <div className="flex w-full flex-col border-4 border-white bg-black shadow-brutal-white">
+      <div className="flex items-center justify-between border-b-4 border-white bg-black p-3 text-white">
         <span className="text-sm font-bold uppercase tracking-wider">
           Customer Support AI
         </span>
         {fallback && (
-          <span className="border-2 border-paper px-2 py-0.5 text-xs font-bold uppercase tracking-wider">
+          <span className="border-2 border-white px-2 py-0.5 text-xs font-bold uppercase tracking-wider">
             Local Fallback
           </span>
         )}
@@ -117,10 +117,10 @@ export function ChatbotDemo() {
               key={index}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className={`max-w-[80%] border-2 border-ink p-3 text-sm shadow-brutal-sm ${
+              className={`max-w-[80%] border-2 p-3 text-sm shadow-brutal-white-sm ${
                 msg.role === "user"
-                  ? "self-end bg-accent-yellow text-ink"
-                  : "self-start bg-paper text-ink"
+                  ? "self-start border-white bg-white text-black"
+                  : "self-start border-white bg-black text-white"
               }`}
             >
               {msg.text}
@@ -130,7 +130,7 @@ export function ChatbotDemo() {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="self-start border-2 border-ink bg-paper p-3 text-sm shadow-brutal-sm"
+              className="self-start border-2 border-white bg-black p-3 text-sm shadow-brutal-white-sm"
             >
               <span className="flex gap-1">
                 <span className="animate-bounce">●</span>
@@ -142,7 +142,7 @@ export function ChatbotDemo() {
         </AnimatePresence>
       </div>
 
-      <div className="border-t-4 border-ink p-3">
+      <div className="border-t-4 border-white p-3">
         <div className="mb-3 flex flex-wrap gap-2">
           {starterPrompts.map((prompt) => (
             <button
@@ -150,7 +150,7 @@ export function ChatbotDemo() {
               onClick={() => {
                 setInput(prompt);
               }}
-              className="border-2 border-ink bg-paper px-2 py-1 text-xs font-bold uppercase shadow-brutal-sm transition-colors hover:bg-accent-yellow"
+              className="border-2 border-white bg-black px-2 py-1 text-xs font-bold uppercase text-white shadow-brutal-white-sm transition-colors hover:bg-white hover:text-black"
             >
               {prompt}
             </button>
@@ -163,11 +163,11 @@ export function ChatbotDemo() {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Type a support question..."
-            className="flex-1 border-4 border-ink bg-paper px-4 py-2 font-mono text-base shadow-brutal-sm outline-none focus:shadow-brutal"
+            className="flex-1 border-4 border-white bg-black px-4 py-2 font-mono text-base text-white shadow-brutal-white-sm outline-none focus:shadow-brutal-white"
           />
           <button
             onClick={handleSend}
-            className="border-4 border-ink bg-accent-blue px-4 py-2 font-bold uppercase tracking-wider text-white shadow-brutal transition-transform hover:-translate-x-1 hover:-translate-y-1 hover:shadow-brutal-lg"
+            className="border-4 border-white bg-white px-4 py-2 font-bold uppercase tracking-wider text-black shadow-brutal-white transition-transform hover:-translate-x-1 hover:-translate-y-1 hover:shadow-brutal-white-lg"
           >
             Send
           </button>

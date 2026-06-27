@@ -69,9 +69,9 @@ export function SentimentDemo() {
   };
 
   const colorMap = {
-    positive: "bg-accent-blue text-white",
-    negative: "bg-accent-pink text-white",
-    neutral: "bg-paper text-ink",
+    positive: "bg-white text-black",
+    negative: "bg-white text-black",
+    neutral: "bg-black text-white",
   };
 
   const labelMap = {
@@ -92,7 +92,7 @@ export function SentimentDemo() {
         <textarea
           id="sentiment-input"
           rows={4}
-          className="w-full resize-none border-4 border-ink bg-paper p-4 font-mono text-base shadow-brutal-sm outline-none focus:shadow-brutal"
+          className="w-full resize-none border-4 border-white bg-black p-4 font-mono text-base text-white shadow-brutal-white-sm outline-none focus:shadow-brutal-white"
           placeholder="Type a tweet or Reddit comment..."
           value={text}
           onChange={(e) => setText(e.target.value)}
@@ -103,7 +103,7 @@ export function SentimentDemo() {
         <button
           onClick={handleAnalyze}
           disabled={loading || !text.trim()}
-          className="border-4 border-ink bg-accent-yellow px-6 py-3 font-bold uppercase tracking-wider shadow-brutal transition-transform hover:-translate-x-1 hover:-translate-y-1 hover:shadow-brutal-lg disabled:opacity-50 disabled:hover:translate-0 disabled:hover:shadow-brutal"
+          className="border-4 border-white bg-white px-6 py-3 font-bold uppercase tracking-wider text-black shadow-brutal-white transition-transform hover:-translate-x-1 hover:-translate-y-1 hover:shadow-brutal-white-lg disabled:opacity-50 disabled:hover:translate-0 disabled:hover:shadow-brutal-white"
         >
           {loading ? "Analyzing with Gemini..." : "Analyze Sentiment"}
         </button>
@@ -116,7 +116,7 @@ export function SentimentDemo() {
                 setResult(null);
                 setExplanation("");
               }}
-              className="border-2 border-ink bg-paper px-3 py-1 text-xs font-bold uppercase tracking-wider shadow-brutal-sm transition-colors hover:bg-accent-yellow"
+              className="border-2 border-white bg-black px-3 py-1 text-xs font-bold uppercase tracking-wider text-white shadow-brutal-white-sm transition-colors hover:bg-white hover:text-black"
             >
               Try: &quot;{example.slice(0, 20)}...&quot;
             </button>
@@ -131,7 +131,7 @@ export function SentimentDemo() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
-            className={`border-4 border-ink p-4 shadow-brutal ${colorMap[result]}`}
+            className={`border-4 border-white p-4 shadow-brutal-white ${colorMap[result]}`}
           >
             <span className="text-sm font-bold uppercase tracking-wider opacity-80">
               {fallback ? "Local fallback sentiment" : "Gemini predicted sentiment"}
@@ -144,7 +144,7 @@ export function SentimentDemo() {
         )}
       </AnimatePresence>
 
-      <p className="text-sm text-ink/70">
+      <p className="text-sm text-white/70">
         This demo first calls the Gemini API. If the API is unavailable, it falls
         back to a local rule-based classifier.
       </p>

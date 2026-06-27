@@ -73,7 +73,7 @@ export function ImageClassifierDemo() {
         onDrop={onDrop}
         onDragOver={(e) => e.preventDefault()}
         onClick={() => inputRef.current?.click()}
-        className="cursor-pointer border-4 border-dashed border-ink bg-paper p-8 text-center shadow-brutal-sm transition-colors hover:bg-accent-yellow"
+        className="cursor-pointer border-4 border-dashed border-white bg-black p-8 text-center shadow-brutal-white-sm transition-colors hover:bg-white hover:text-black"
       >
         <input
           ref={inputRef}
@@ -94,7 +94,7 @@ export function ImageClassifierDemo() {
       </div>
 
       {image && (
-        <div className="border-4 border-ink bg-paper p-2 shadow-brutal">
+        <div className="border-4 border-white bg-black p-2 shadow-brutal-white">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={image}
@@ -105,8 +105,8 @@ export function ImageClassifierDemo() {
       )}
 
       {loading && (
-        <div className="flex items-center gap-3 border-4 border-ink bg-paper p-4 shadow-brutal">
-          <div className="h-6 w-6 animate-spin border-4 border-ink border-t-transparent" />
+        <div className="flex items-center gap-3 border-4 border-white bg-black p-4 shadow-brutal-white">
+          <div className="h-6 w-6 animate-spin border-4 border-white border-t-transparent" />
           <span className="font-bold uppercase tracking-wider">
             Analyzing with Gemini Vision...
           </span>
@@ -119,12 +119,12 @@ export function ImageClassifierDemo() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
-            className="border-4 border-ink bg-paper p-4 shadow-brutal"
+            className="border-4 border-white bg-black p-4 text-white shadow-brutal-white"
           >
             <div className="mb-3 flex items-center justify-between text-sm font-bold uppercase tracking-wider">
               <span>Top Predictions</span>
               {fallback && (
-                <span className="text-xs text-accent-pink">Local Fallback</span>
+                <span className="text-xs text-white/70">Local Fallback</span>
               )}
             </div>
             <div className="space-y-3">
@@ -134,12 +134,12 @@ export function ImageClassifierDemo() {
                     <span>{result.label}</span>
                     <span>{(result.confidence * 100).toFixed(1)}%</span>
                   </div>
-                  <div className="mt-1 h-4 w-full border-2 border-ink bg-paper">
+                  <div className="mt-1 h-4 w-full border-2 border-white bg-black">
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: `${result.confidence * 100}%` }}
                       transition={{ duration: 0.6 }}
-                      className="h-full bg-accent-blue"
+                      className="h-full bg-white"
                     />
                   </div>
                 </div>
@@ -149,7 +149,7 @@ export function ImageClassifierDemo() {
         )}
       </AnimatePresence>
 
-      <p className="text-sm text-ink/70">
+      <p className="text-sm text-white/70">
         This demo first sends the image to Gemini Vision for classification. If
         the API is unavailable, it falls back to simulated ResNet/VGG-style
         predictions.

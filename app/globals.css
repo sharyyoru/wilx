@@ -42,6 +42,18 @@
   box-shadow: 12px 12px 0px 0px rgba(0, 0, 0, 1);
 }
 
+@utility shadow-brutal-white {
+  box-shadow: 8px 8px 0px 0px rgba(255, 255, 255, 1);
+}
+
+@utility shadow-brutal-white-sm {
+  box-shadow: 4px 4px 0px 0px rgba(255, 255, 255, 1);
+}
+
+@utility shadow-brutal-white-lg {
+  box-shadow: 12px 12px 0px 0px rgba(255, 255, 255, 1);
+}
+
 @utility shadow-brutal-orange {
   box-shadow: 8px 8px 0px 0px var(--accent-orange);
 }

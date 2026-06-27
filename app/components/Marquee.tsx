@@ -9,6 +9,7 @@ export type MarqueeProps = {
   className?: string;
   itemClassName?: string;
   separator?: React.ReactNode;
+  variant?: "light" | "dark";
 };
 
 export function Marquee({
@@ -18,14 +19,23 @@ export function Marquee({
   className = "",
   itemClassName = "",
   separator = "●",
+  variant = "light",
 }: MarqueeProps) {
   const duplicated = [...items, ...items, ...items, ...items];
   const distance = direction === "left" ? "-50%" : "0%";
   const initial = direction === "left" ? "0%" : "-50%";
 
+  const variantClasses =
+    variant === "dark"
+      ? "border-y-4 border-white bg-black text-white"
+      : "border-y-4 border-ink bg-paper text-ink";
+
+  const separatorColor = variant === "dark" ? "text-white" : "text-accent-orange";
+  const fadeFrom = variant === "dark" ? "from-black" : "from-paper";
+
   return (
     <div
-      className={`group relative flex overflow-hidden whitespace-nowrap border-y-4 border-ink bg-paper py-4 ${className}`}
+      className={`group relative flex overflow-hidden whitespace-nowrap py-4 ${variantClasses} ${className}`}
     >
       <motion.div
         className="flex shrink-0 items-center gap-6 pr-6"
@@ -45,14 +55,14 @@ export function Marquee({
             >
               {item}
             </span>
-            <span className="text-accent-orange" aria-hidden="true">
+            <span className={separatorColor} aria-hidden="true">
               {separator}
             </span>
           </span>
         ))}
       </motion.div>
-      <div className="pointer-events-none absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-paper to-transparent sm:w-16" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-paper to-transparent sm:w-16" />
+      <div className={`pointer-events-none absolute inset-y-0 left-0 w-8 bg-gradient-to-r ${fadeFrom} to-transparent sm:w-16`} />
+      <div className={`pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l ${fadeFrom} to-transparent sm:w-16`} />
     </div>
   );
 }

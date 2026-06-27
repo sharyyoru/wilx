@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const vertexShaderSource = `
   attribute vec2 a_position;
@@ -51,16 +51,17 @@ const fragmentShaderSource = `
 
     vec4 color = texture2D(u_image, uv);
     float gray = dot(color.rgb, vec3(0.299, 0.587, 0.114));
+    gray = clamp((gray - 0.45) * 1.35 + 0.45, 0.0, 1.0);
 
     vec2 mouseUV = u_mouse / u_resolution;
     float dist = distance(v_texCoord, mouseUV);
-    float mouseGlow = smoothstep(0.45, 0.0, dist) * 0.35;
-    float ripple = sin(dist * 24.0 - u_time * 2.5) * 0.06 * smoothstep(0.55, 0.0, dist);
+    float mouseGlow = smoothstep(0.5, 0.0, dist) * 0.3;
+    float ripple = sin(dist * 20.0 - u_time * 2.0) * 0.05 * smoothstep(0.6, 0.0, dist);
 
     float threshold = bayerValue(gl_FragCoord.xy) - mouseGlow + ripple;
     float dithered = step(threshold, gray);
 
-    float vignette = 1.0 - smoothstep(0.4, 1.3, length(v_texCoord - 0.5) * 1.2);
+    float vignette = 1.0 - smoothstep(0.5, 1.5, length(v_texCoord - 0.5) * 1.0) * 0.4;
     float final = dithered * vignette;
 
     gl_FragColor = vec4(vec3(final), 1.0);
@@ -103,7 +104,7 @@ function createProgram(
 }
 
 export function DitherShaderBackground({
-  imageSrc = "/dubai-skyline.jpg",
+  imageSrc = "/dubai-skyline-sm.jpg",
   className = "",
 }: {
   imageSrc?: string;
@@ -119,6 +120,8 @@ export function DitherShaderBackground({
   const imageResolutionRef = useRef({ x: 1, y: 1 });
   const startTimeRef = useRef(0);
   const failedRef = useRef(false);
+  const readyRef = useRef(false);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     startTimeRef.current = Date.now();
@@ -127,7 +130,7 @@ export function DitherShaderBackground({
 
     const gl = canvas.getContext("webgl", {
       antialias: false,
-      alpha: false,
+      alpha: true,
       powerPreference: "high-performance",
     });
     if (!gl) {
@@ -179,6 +182,7 @@ export function DitherShaderBackground({
     gl.vertexAttribPointer(texCoordLoc, 2, gl.FLOAT, false, 0, 0);
 
     const texture = gl.createTexture();
+    gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, texture);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
@@ -186,10 +190,10 @@ export function DitherShaderBackground({
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 
     const image = new Image();
-    image.crossOrigin = "anonymous";
     image.src = imageSrc;
     image.onload = () => {
       imageResolutionRef.current = { x: image.width, y: image.height };
+      gl.activeTexture(gl.TEXTURE0);
       gl.bindTexture(gl.TEXTURE_2D, texture);
       gl.texImage2D(
         gl.TEXTURE_2D,
@@ -199,14 +203,22 @@ export function DitherShaderBackground({
         gl.UNSIGNED_BYTE,
         image
       );
+      readyRef.current = true;
+      setReady(true);
+    };
+    image.onerror = () => {
+      console.error("Failed to load dither image:", imageSrc);
+      failedRef.current = true;
     };
 
     uniformsRef.current = {
+      u_image: gl.getUniformLocation(program, "u_image"),
       u_resolution: gl.getUniformLocation(program, "u_resolution"),
       u_imageResolution: gl.getUniformLocation(program, "u_imageResolution"),
       u_mouse: gl.getUniformLocation(program, "u_mouse"),
       u_time: gl.getUniformLocation(program, "u_time"),
     };
+    gl.uniform1i(uniformsRef.current.u_image, 0);
 
     const resize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -236,7 +248,7 @@ export function DitherShaderBackground({
     ).matches;
 
     const render = () => {
-      if (failedRef.current) return;
+      if (failedRef.current || !readyRef.current) return;
 
       mouseRef.current.x +=
         (targetMouseRef.current.x - mouseRef.current.x) * 0.08;
@@ -287,14 +299,28 @@ export function DitherShaderBackground({
   }, [imageSrc]);
 
   return (
-    <canvas
-      ref={canvasRef}
-      className={`fixed inset-0 z-0 ${className}`}
-      aria-hidden="true"
-      style={{
-        background: "#000",
-        pointerEvents: "none",
-      }}
-    />
+    <>
+      <div
+        className={`fixed inset-0 z-0 ${className}`}
+        aria-hidden="true"
+        style={{
+          backgroundImage: `url(${imageSrc})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          filter: "grayscale(100%) contrast(130%) brightness(30%)",
+          pointerEvents: "none",
+        }}
+      />
+      <canvas
+        ref={canvasRef}
+        className={`fixed inset-0 z-0 ${className}`}
+        aria-hidden="true"
+        style={{
+          opacity: ready ? 1 : 0,
+          transition: "opacity 0.5s ease",
+          pointerEvents: "none",
+        }}
+      />
+    </>
   );
 }

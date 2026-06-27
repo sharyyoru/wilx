@@ -12,10 +12,10 @@ const positiveWords = new Set([
 const negativeWords = new Set([
   "bad", "hate", "terrible", "worst", "awful", "sad", "angry", "poor",
   "horrible", "disappointing", "disgusting", "boring", "useless", "annoying",
-  "frustrated", "worst", "fail", "broken", "waste", "ugly",
+  "frustrated", "fail", "broken", "waste", "ugly",
 ]);
 
-function classify(text: string): "positive" | "negative" | "neutral" {
+function classifyLocally(text: string): "positive" | "negative" | "neutral" {
   const words = text.toLowerCase().match(/\b\w+\b/g) || [];
   let score = 0;
   words.forEach((word) => {
@@ -36,16 +36,36 @@ const examples = [
 export function SentimentDemo() {
   const [text, setText] = useState("");
   const [result, setResult] = useState<"positive" | "negative" | "neutral" | null>(null);
+  const [explanation, setExplanation] = useState("");
   const [loading, setLoading] = useState(false);
+  const [fallback, setFallback] = useState(false);
 
-  const handleAnalyze = () => {
+  const handleAnalyze = async () => {
     if (!text.trim()) return;
     setLoading(true);
     setResult(null);
-    setTimeout(() => {
-      setResult(classify(text));
+    setExplanation("");
+    setFallback(false);
+
+    try {
+      const res = await fetch("/api/ai/sentiment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text }),
+      });
+
+      if (!res.ok) throw new Error("AI request failed");
+
+      const data = await res.json();
+      setResult(data.sentiment);
+      setExplanation(data.explanation);
+    } catch {
+      setResult(classifyLocally(text));
+      setExplanation("Gemini was unavailable; using local rule-based fallback.");
+      setFallback(true);
+    } finally {
       setLoading(false);
-    }, 600);
+    }
   };
 
   const colorMap = {
@@ -85,7 +105,7 @@ export function SentimentDemo() {
           disabled={loading || !text.trim()}
           className="border-4 border-ink bg-accent-yellow px-6 py-3 font-bold uppercase tracking-wider shadow-brutal transition-transform hover:-translate-x-1 hover:-translate-y-1 hover:shadow-brutal-lg disabled:opacity-50 disabled:hover:translate-0 disabled:hover:shadow-brutal"
         >
-          {loading ? "Analyzing..." : "Analyze Sentiment"}
+          {loading ? "Analyzing with Gemini..." : "Analyze Sentiment"}
         </button>
         <div className="flex flex-wrap gap-2">
           {examples.map((example) => (
@@ -94,6 +114,7 @@ export function SentimentDemo() {
               onClick={() => {
                 setText(example);
                 setResult(null);
+                setExplanation("");
               }}
               className="border-2 border-ink bg-paper px-3 py-1 text-xs font-bold uppercase tracking-wider shadow-brutal-sm transition-colors hover:bg-accent-yellow"
             >
@@ -113,16 +134,19 @@ export function SentimentDemo() {
             className={`border-4 border-ink p-4 shadow-brutal ${colorMap[result]}`}
           >
             <span className="text-sm font-bold uppercase tracking-wider opacity-80">
-              Predicted sentiment
+              {fallback ? "Local fallback sentiment" : "Gemini predicted sentiment"}
             </span>
             <div className="mt-1 text-2xl font-black">{labelMap[result]}</div>
+            {explanation && (
+              <p className="mt-2 text-sm opacity-90">{explanation}</p>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
 
       <p className="text-sm text-ink/70">
-        This demo uses a rule-based classifier for the UI. In production, swap
-        the logic for a Gemini API call or a fine-tuned Hugging Face model.
+        This demo first calls the Gemini API. If the API is unavailable, it falls
+        back to a local rule-based classifier.
       </p>
     </div>
   );

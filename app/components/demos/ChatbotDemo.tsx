@@ -47,24 +47,47 @@ export function ChatbotDemo() {
   ]);
   const [input, setInput] = useState("");
   const [typing, setTyping] = useState(false);
+  const [fallback, setFallback] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, typing]);
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!input.trim()) return;
     const userMessage = input.trim();
     setMessages((prev) => [...prev, { role: "user", text: userMessage }]);
     setInput("");
     setTyping(true);
+    setFallback(false);
 
-    setTimeout(() => {
+    try {
+      const history = messages
+        .filter((msg) => msg.role !== "bot" || msg.text !== "Hello! I am your AI support assistant. How can I help?")
+        .slice(1)
+        .map((msg) => ({
+          role: msg.role === "user" ? "user" : "model",
+          text: msg.text,
+        }));
+
+      const res = await fetch("/api/ai/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: userMessage, history }),
+      });
+
+      if (!res.ok) throw new Error("AI request failed");
+
+      const data = await res.json();
+      setMessages((prev) => [...prev, { role: "bot", text: data.reply }]);
+    } catch {
+      setFallback(true);
       const reply = getBotReply(userMessage);
       setMessages((prev) => [...prev, { role: "bot", text: reply }]);
+    } finally {
       setTyping(false);
-    }, 900);
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -73,10 +96,15 @@ export function ChatbotDemo() {
 
   return (
     <div className="flex w-full flex-col border-4 border-ink bg-paper shadow-brutal">
-      <div className="border-b-4 border-ink bg-ink p-3 text-paper">
+      <div className="flex items-center justify-between border-b-4 border-ink bg-ink p-3 text-paper">
         <span className="text-sm font-bold uppercase tracking-wider">
           Customer Support AI
         </span>
+        {fallback && (
+          <span className="border-2 border-paper px-2 py-0.5 text-xs font-bold uppercase tracking-wider">
+            Local Fallback
+          </span>
+        )}
       </div>
 
       <div

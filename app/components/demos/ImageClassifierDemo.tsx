@@ -16,7 +16,17 @@ export function ImageClassifierDemo() {
     { label: string; confidence: number }[] | null
   >(null);
   const [loading, setLoading] = useState(false);
+  const [fallback, setFallback] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const getMockResults = () => {
+    const random = sampleCategories[Math.floor(Math.random() * sampleCategories.length)];
+    const parsed = [];
+    for (let i = 0; i < random.length; i += 2) {
+      parsed.push({ label: random[i] as string, confidence: random[i + 1] as number });
+    }
+    return parsed;
+  };
 
   const handleFile = (file: File) => {
     if (!file.type.startsWith("image/")) return;
@@ -24,16 +34,31 @@ export function ImageClassifierDemo() {
     setImage(url);
     setResults(null);
     setLoading(true);
+    setFallback(false);
 
-    setTimeout(() => {
-      const random = sampleCategories[Math.floor(Math.random() * sampleCategories.length)];
-      const parsed = [];
-      for (let i = 0; i < random.length; i += 2) {
-        parsed.push({ label: random[i] as string, confidence: random[i + 1] as number });
+    const reader = new FileReader();
+    reader.onload = async () => {
+      const base64 = (reader.result as string).split(",")[1];
+
+      try {
+        const res = await fetch("/api/ai/classify", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ image: base64 }),
+        });
+
+        if (!res.ok) throw new Error("AI request failed");
+
+        const data = await res.json();
+        setResults(data.predictions);
+      } catch {
+        setFallback(true);
+        setResults(getMockResults());
+      } finally {
+        setLoading(false);
       }
-      setResults(parsed);
-      setLoading(false);
-    }, 1500);
+    };
+    reader.readAsDataURL(file);
   };
 
   const onDrop = (e: React.DragEvent<HTMLDivElement>) => {
@@ -83,7 +108,7 @@ export function ImageClassifierDemo() {
         <div className="flex items-center gap-3 border-4 border-ink bg-paper p-4 shadow-brutal">
           <div className="h-6 w-6 animate-spin border-4 border-ink border-t-transparent" />
           <span className="font-bold uppercase tracking-wider">
-            Running ResNet inference...
+            Analyzing with Gemini Vision...
           </span>
         </div>
       )}
@@ -96,8 +121,11 @@ export function ImageClassifierDemo() {
             exit={{ opacity: 0, y: -12 }}
             className="border-4 border-ink bg-paper p-4 shadow-brutal"
           >
-            <div className="mb-3 text-sm font-bold uppercase tracking-wider">
-              Top Predictions
+            <div className="mb-3 flex items-center justify-between text-sm font-bold uppercase tracking-wider">
+              <span>Top Predictions</span>
+              {fallback && (
+                <span className="text-xs text-accent-pink">Local Fallback</span>
+              )}
             </div>
             <div className="space-y-3">
               {results.map((result) => (
@@ -122,9 +150,9 @@ export function ImageClassifierDemo() {
       </AnimatePresence>
 
       <p className="text-sm text-ink/70">
-        This demo simulates a transfer-learning classifier on the frontend. In
-        production, image bytes would be sent to a Python backend with a
-        TensorFlow/Keras model or the Gemini vision API.
+        This demo first sends the image to Gemini Vision for classification. If
+        the API is unavailable, it falls back to simulated ResNet/VGG-style
+        predictions.
       </p>
     </div>
   );

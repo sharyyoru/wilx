@@ -20,6 +20,7 @@ const fragmentShaderSource = `
   uniform vec2 u_imageResolution;
   uniform vec2 u_mouse;
   uniform float u_time;
+  uniform float u_gridSize;
 
   mat4 bayer = mat4(
     0.0, 8.0, 2.0, 10.0,
@@ -29,7 +30,7 @@ const fragmentShaderSource = `
   );
 
   float bayerValue(vec2 coord) {
-    ivec2 ij = ivec2(mod(coord, 4.0));
+    ivec2 ij = ivec2(mod(floor(coord / u_gridSize), 4.0));
     return bayer[ij.x][ij.y] / 16.0;
   }
 
@@ -190,7 +191,6 @@ export function DitherShaderBackground({
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 
     const image = new Image();
-    image.src = imageSrc;
     image.onload = () => {
       imageResolutionRef.current = { x: image.width, y: image.height };
       gl.activeTexture(gl.TEXTURE0);
@@ -210,6 +210,7 @@ export function DitherShaderBackground({
       console.error("Failed to load dither image:", imageSrc);
       failedRef.current = true;
     };
+    image.src = imageSrc;
 
     uniformsRef.current = {
       u_image: gl.getUniformLocation(program, "u_image"),
@@ -217,6 +218,7 @@ export function DitherShaderBackground({
       u_imageResolution: gl.getUniformLocation(program, "u_imageResolution"),
       u_mouse: gl.getUniformLocation(program, "u_mouse"),
       u_time: gl.getUniformLocation(program, "u_time"),
+      u_gridSize: gl.getUniformLocation(program, "u_gridSize"),
     };
     gl.uniform1i(uniformsRef.current.u_image, 0);
 
@@ -275,6 +277,7 @@ export function DitherShaderBackground({
         mouseRef.current.y
       );
       gl.uniform1f(uniformsRef.current.u_time, time);
+      gl.uniform1f(uniformsRef.current.u_gridSize, 4.0);
 
       gl.drawArrays(gl.TRIANGLES, 0, 6);
       rafRef.current = requestAnimationFrame(render);

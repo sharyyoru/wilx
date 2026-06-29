@@ -159,14 +159,111 @@ function SlideshowCard({ images, label }: { images: string[]; label: string }) {
   );
 }
 
+const NINJAGO_WORDS = [
+  "SPINJITZU",
+  "NINJAGO",
+  "ELEMENTAL",
+  "DRAGON CORE",
+  "CUSTOM MOC",
+  "TECHNIC RIG",
+  "BRICK BUILT",
+  "GOLDEN NINJA",
+  "GHOST REALM",
+  "FORBIDDEN SPINJITZU",
+  "MECH BUILDER",
+  "LEGACY SERIES",
+  "TITAN MECH",
+  "DARK ISLAND",
+  "INFINITE OCEAN",
+  "CRYSTALIZED",
+];
+
+function NinjagoFlipCard() {
+  const [idx, setIdx] = useState(0);
+  const [out, setOut] = useState(false);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setOut(true);
+      setTimeout(() => {
+        setIdx((i) => (i + 1) % NINJAGO_WORDS.length);
+        setOut(false);
+      }, 350);
+    }, 2000);
+    return () => clearInterval(id);
+  }, []);
+
+  const word = NINJAGO_WORDS[idx];
+
+  return (
+    <div
+      className="relative overflow-hidden bg-black flex flex-col items-center justify-center"
+      style={{ aspectRatio: "9/16" }}
+    >
+      {/* Background pattern */}
+      <div className="pointer-events-none absolute inset-0 opacity-10"
+        style={{
+          backgroundImage: "repeating-linear-gradient(45deg, #fff 0, #fff 1px, transparent 0, transparent 50%)",
+          backgroundSize: "12px 12px",
+        }}
+      />
+
+      {/* Top label */}
+      <div className="absolute top-4 left-0 right-0 flex justify-center">
+        <span className="border border-white/30 px-3 py-0.5 text-[9px] font-bold uppercase tracking-[0.3em] text-white/40">
+          Custom Builds
+        </span>
+      </div>
+
+      {/* Flip word */}
+      <div className="flex items-center justify-center px-4" style={{ perspective: "600px" }}>
+        <span
+          className="block text-center font-black uppercase leading-none text-white"
+          style={{
+            fontSize: "clamp(1.1rem, 4.5vw, 2rem)",
+            letterSpacing: "-0.02em",
+            fontStretch: "ultra-condensed",
+            transition: "transform 350ms cubic-bezier(0.4,0,0.2,1), opacity 350ms",
+            transform: out ? "rotateX(90deg) scale(0.8)" : "rotateX(0deg) scale(1)",
+            opacity: out ? 0 : 1,
+            transformOrigin: "50% 50%",
+            textShadow: "0 0 40px rgba(255,255,255,0.4)",
+            wordBreak: "break-word",
+          }}
+        >
+          {word}
+        </span>
+      </div>
+
+      {/* Progress dots */}
+      <div className="absolute bottom-4 flex gap-1">
+        {NINJAGO_WORDS.map((_, i) => (
+          <div
+            key={i}
+            className="rounded-full transition-all duration-300"
+            style={{
+              width: i === idx ? "16px" : "4px",
+              height: "4px",
+              background: i === idx ? "#fff" : "rgba(255,255,255,0.2)",
+            }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function LegoSection() {
   return (
     <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
-      {VIDEOS.map((v) => (
-        <VideoCard key={v.src} src={v.src} label={v.label} />
-      ))}
+      <VideoCard src={VIDEOS[0].src} label={VIDEOS[0].label} />
       <SlideshowCard images={LLOYD_IMAGES} label="Lloyd — Life Dragon Mech" />
+      <VideoCard src={VIDEOS[1].src} label={VIDEOS[1].label} />
+      <VideoCard src={VIDEOS[2].src} label={VIDEOS[2].label} />
+      <VideoCard src={VIDEOS[3].src} label={VIDEOS[3].label} />
+      <VideoCard src={VIDEOS[4].src} label={VIDEOS[4].label} />
       <SlideshowCard images={RAS_IMAGES} label="Ras — Rage Mech" />
+      <NinjagoFlipCard />
     </div>
   );
 }

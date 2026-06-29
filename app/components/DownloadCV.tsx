@@ -318,9 +318,6 @@ export function DownloadCV() {
         const fullW = W - PAD * 2;
         let fw = Math.max(ry, lp2End) + 10;
 
-        // Full-width divider
-        hRule(doc, fw - 2, PAD, W - PAD, 0.3);
-
         // Section: Digital Marketing Approach
         fw = sectionLabel(doc, "Digital Marketing Approach", PAD, fw, W - PAD);
         fw += 1;

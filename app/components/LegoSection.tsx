@@ -3,18 +3,18 @@
 import { useEffect } from "react";
 
 export const INSTAGRAM_REELS: { url: string; caption: string }[] = [
-  { url: "https://www.instagram.com/reel/PLACEHOLDER_1/", caption: "Lego Build 1" },
-  { url: "https://www.instagram.com/reel/PLACEHOLDER_2/", caption: "Lego Build 2" },
-  { url: "https://www.instagram.com/reel/PLACEHOLDER_3/", caption: "Lego Build 3" },
-  { url: "https://www.instagram.com/reel/PLACEHOLDER_4/", caption: "Lego Build 4" },
-  { url: "https://www.instagram.com/reel/PLACEHOLDER_5/", caption: "Lego Build 5" },
-  { url: "https://www.instagram.com/reel/PLACEHOLDER_6/", caption: "Lego Build 6" },
-  { url: "https://www.instagram.com/reel/PLACEHOLDER_7/", caption: "Lego Build 7" },
-  { url: "https://www.instagram.com/reel/PLACEHOLDER_8/", caption: "Lego Build 8" },
-  { url: "https://www.instagram.com/reel/PLACEHOLDER_9/", caption: "Lego Build 9" },
-  { url: "https://www.instagram.com/reel/PLACEHOLDER_10/", caption: "Lego Build 10" },
-  { url: "https://www.instagram.com/reel/PLACEHOLDER_11/", caption: "Lego Build 11" },
-  { url: "https://www.instagram.com/reel/PLACEHOLDER_12/", caption: "Lego Build 12" },
+  { url: "https://www.instagram.com/p/DWSIVyMCN7q/", caption: "Lego Build 1" },
+  { url: "https://www.instagram.com/p/DWQ1uTziN-m/", caption: "Lego Build 2" },
+  { url: "https://www.instagram.com/p/DWU7Y9YCDtx/", caption: "Lego Build 3" },
+  { url: "https://www.instagram.com/p/DWKR_ijiAgp/", caption: "Lego Build 4" },
+  { url: "https://www.instagram.com/p/DWH8C7qCD8U/", caption: "Lego Build 5" },
+  { url: "https://www.instagram.com/p/DWFau0yiG2w/", caption: "Lego Build 6" },
+  { url: "https://www.instagram.com/p/DWBgnEICJt2/", caption: "Lego Build 7" },
+  { url: "https://www.instagram.com/p/DWBfgrmiK9o/", caption: "Lego Build 8" },
+  { url: "https://www.instagram.com/p/DV-1wCECLgd/", caption: "Lego Build 9" },
+  { url: "https://www.instagram.com/p/DV9IttJCB3z/", caption: "Lego Build 10 (Slideshow)" },
+  { url: "https://www.instagram.com/p/DV84YeiCAlm/", caption: "Lego Build 11" },
+  { url: "https://www.instagram.com/p/DV8NylICH_j/", caption: "Lego Build 12" },
 ];
 
 const BENTO_LAYOUT = [

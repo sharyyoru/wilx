@@ -15,6 +15,7 @@ import { Car, Bot, Wrench } from "lucide-react";
 import { HeroSubtitle } from "./components/HeroSubtitle";
 import { LegoSection } from "./components/LegoSection";
 import { BrandMarketingSection } from "./components/BrandMarketingSection";
+import { DownloadCV } from "./components/DownloadCV";
 
 const EMAIL = "artali.create@gmail.com";
 const GITHUB = "https://github.com/sharyyoru";
@@ -130,6 +131,7 @@ export default function Home() {
                   </svg>
                   LinkedIn
                 </a>
+                <DownloadCV />
               </div>
               <div className="mt-8 border-t border-white/20 pt-6">
                 <p className="mb-3 inline-block border-l-2 border-white pl-2 text-xs font-bold uppercase tracking-widest text-white">

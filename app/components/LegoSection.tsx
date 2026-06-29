@@ -216,19 +216,20 @@ function NinjagoFlipCard() {
       </div>
 
       {/* Flip word */}
-      <div className="flex items-center justify-center px-4" style={{ perspective: "600px" }}>
+      <div className="flex items-center justify-center px-3 w-full" style={{ perspective: "600px" }}>
         <span
-          className="block text-center font-black uppercase leading-none text-white"
+          className="block text-center font-black uppercase leading-none text-white rounded-sm px-2 py-1"
           style={{
-            fontSize: "clamp(1.1rem, 4.5vw, 2rem)",
+            fontSize: "clamp(1.3rem, 5.5vw, 2rem)",
             letterSpacing: "-0.02em",
             fontStretch: "ultra-condensed",
             transition: "transform 350ms cubic-bezier(0.4,0,0.2,1), opacity 350ms",
             transform: out ? "rotateX(90deg) scale(0.8)" : "rotateX(0deg) scale(1)",
             opacity: out ? 0 : 1,
             transformOrigin: "50% 50%",
-            textShadow: "0 0 40px rgba(255,255,255,0.4)",
+            textShadow: "0 0 30px rgba(255,255,255,0.5)",
             wordBreak: "break-word",
+            background: "rgba(0,0,0,0.75)",
           }}
         >
           {word}

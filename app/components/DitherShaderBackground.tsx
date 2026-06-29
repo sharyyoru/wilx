@@ -111,7 +111,7 @@ function createProgram(
 }
 
 export function DitherShaderBackground({
-  imageSrc = "/cyberpunk-city-sm.jpg",
+  imageSrc = "/Gt500.jpg",
   className = "",
 }: {
   imageSrc?: string;
@@ -284,7 +284,7 @@ export function DitherShaderBackground({
         className={`fixed inset-0 z-0 ${className}`}
         aria-hidden="true"
         style={{
-          backgroundImage: "url('/cyberpunk-city-sm.jpg')",
+          backgroundImage: "url('/Gt500.jpg')",
           backgroundSize: "cover",
           backgroundPosition: "center",
           filter: "grayscale(100%) contrast(130%) brightness(20%)",

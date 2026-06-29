@@ -105,6 +105,15 @@ html {
   scroll-behavior: smooth;
 }
 
+@keyframes bounce-down {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(4px); }
+}
+
+@utility animate-bounce-down {
+  animation: bounce-down 1.4s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

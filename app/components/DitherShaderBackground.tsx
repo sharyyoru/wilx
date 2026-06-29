@@ -68,7 +68,7 @@ const fragmentShaderSource = `
     vec4 color = texture2D(u_image, uv);
     float gray = dot(color.rgb, vec3(0.299, 0.587, 0.114));
     // Compress into a dark range so dither pixels are dim, not full white
-    float darkened = gray * 0.45;
+    float darkened = gray * 0.72;
 
     vec2 mouseUV = u_mouse / u_resolution;
     float dist = distance(v_texCoord, mouseUV);

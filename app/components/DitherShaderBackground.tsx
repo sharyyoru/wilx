@@ -22,16 +22,31 @@ const fragmentShaderSource = `
   uniform float u_time;
   uniform float u_gridSize;
 
-  mat4 bayer = mat4(
-    0.0, 8.0, 2.0, 10.0,
-    12.0, 4.0, 14.0, 6.0,
-    3.0, 11.0, 1.0, 9.0,
-    15.0, 7.0, 13.0, 5.0
-  );
+  // WebGL 1.0 compatible ordered dither — uses a 4x4 Bayer matrix encoded
+  // as four vec4 rows so indexing is always by constant or loop variable.
+  float bayer4(vec2 coord) {
+    vec2 c = floor(mod(coord / u_gridSize, 4.0));
+    int cx = int(c.x);
+    int cy = int(c.y);
 
-  float bayerValue(vec2 coord) {
-    ivec2 ij = ivec2(mod(floor(coord / u_gridSize), 4.0));
-    return bayer[ij.x][ij.y] / 16.0;
+    vec4 row0 = vec4( 0.0,  8.0,  2.0, 10.0);
+    vec4 row1 = vec4(12.0,  4.0, 14.0,  6.0);
+    vec4 row2 = vec4( 3.0, 11.0,  1.0,  9.0);
+    vec4 row3 = vec4(15.0,  7.0, 13.0,  5.0);
+
+    vec4 row;
+    if (cx == 0) row = row0;
+    else if (cx == 1) row = row1;
+    else if (cx == 2) row = row2;
+    else row = row3;
+
+    float val;
+    if (cy == 0) val = row.x;
+    else if (cy == 1) val = row.y;
+    else if (cy == 2) val = row.z;
+    else val = row.w;
+
+    return val / 16.0;
   }
 
   void main() {
@@ -52,20 +67,16 @@ const fragmentShaderSource = `
 
     vec4 color = texture2D(u_image, uv);
     float gray = dot(color.rgb, vec3(0.299, 0.587, 0.114));
-    gray = clamp((gray - 0.45) * 1.35 + 0.45, 0.0, 1.0);
 
     vec2 mouseUV = u_mouse / u_resolution;
     float dist = distance(v_texCoord, mouseUV);
-    float mouseGlow = smoothstep(0.5, 0.0, dist) * 0.3;
-    float ripple = sin(dist * 20.0 - u_time * 2.0) * 0.05 * smoothstep(0.6, 0.0, dist);
+    float mouseGlow = smoothstep(0.4, 0.0, dist) * 0.25;
+    float ripple = sin(dist * 18.0 - u_time * 2.5) * 0.04 * smoothstep(0.5, 0.0, dist);
 
-    float threshold = bayerValue(gl_FragCoord.xy) - mouseGlow + ripple;
+    float threshold = bayer4(gl_FragCoord.xy) - mouseGlow + ripple;
     float dithered = step(threshold, gray);
 
-    float vignette = 1.0 - smoothstep(0.5, 1.5, length(v_texCoord - 0.5) * 1.0) * 0.4;
-    float final = dithered * vignette;
-
-    gl_FragColor = vec4(vec3(final), 1.0);
+    gl_FragColor = vec4(vec3(dithered), 1.0);
   }
 `;
 
@@ -176,7 +187,7 @@ export function DitherShaderBackground({
     gl.bindBuffer(gl.ARRAY_BUFFER, texCoordBuffer);
     gl.bufferData(
       gl.ARRAY_BUFFER,
-      new Float32Array([0, 0, 1, 0, 0, 1, 0, 1, 1, 0, 1, 1]),
+      new Float32Array([0, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0]),
       gl.STATIC_DRAW
     );
     gl.enableVertexAttribArray(texCoordLoc);
@@ -191,6 +202,9 @@ export function DitherShaderBackground({
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
 
     const image = new Image();
+    if (imageSrc.startsWith("http")) {
+      image.crossOrigin = "anonymous";
+    }
     image.onload = () => {
       imageResolutionRef.current = { x: image.width, y: image.height };
       gl.activeTexture(gl.TEXTURE0);
@@ -211,6 +225,10 @@ export function DitherShaderBackground({
       failedRef.current = true;
     };
     image.src = imageSrc;
+
+    if (image.complete) {
+      image.onload?.(new Event("load"));
+    }
 
     uniformsRef.current = {
       u_image: gl.getUniformLocation(program, "u_image"),
@@ -250,7 +268,11 @@ export function DitherShaderBackground({
     ).matches;
 
     const render = () => {
-      if (failedRef.current || !readyRef.current) return;
+      if (failedRef.current) return;
+      if (!readyRef.current) {
+        rafRef.current = requestAnimationFrame(render);
+        return;
+      }
 
       mouseRef.current.x +=
         (targetMouseRef.current.x - mouseRef.current.x) * 0.08;
@@ -261,6 +283,7 @@ export function DitherShaderBackground({
         ? 0
         : (Date.now() - startTimeRef.current) / 1000;
 
+      gl.useProgram(programRef.current);
       gl.uniform2f(
         uniformsRef.current.u_resolution,
         canvas.width,
@@ -307,10 +330,10 @@ export function DitherShaderBackground({
         className={`fixed inset-0 z-0 ${className}`}
         aria-hidden="true"
         style={{
-          backgroundImage: `url(${imageSrc})`,
+          backgroundImage: "url('/dubai-skyline-sm.jpg')",
           backgroundSize: "cover",
           backgroundPosition: "center",
-          filter: "grayscale(100%) contrast(130%) brightness(30%)",
+          filter: "grayscale(100%) contrast(130%) brightness(20%)",
           pointerEvents: "none",
         }}
       />
@@ -324,6 +347,9 @@ export function DitherShaderBackground({
           pointerEvents: "none",
         }}
       />
+      <div className="fixed bottom-4 right-4 z-50 rounded bg-black px-2 py-1 text-xs font-mono text-white">
+        {ready ? "webgl ready" : "webgl not ready"}
+      </div>
     </>
   );
 }

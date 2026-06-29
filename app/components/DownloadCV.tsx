@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import QRCode from "qrcode";
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 const W = 210;
@@ -21,6 +22,11 @@ function stroke(doc: Doc, r: number, g: number, b: number) { doc.setDrawColor(r,
 function B(doc: Doc, size: number) { doc.setFont("helvetica", "bold"); doc.setFontSize(size); }
 function N(doc: Doc, size: number) { doc.setFont("helvetica", "normal"); doc.setFontSize(size); }
 function I(doc: Doc, size: number) { doc.setFont("helvetica", "italic"); doc.setFontSize(size); }
+
+function hexToRgb(hex: string): [number, number, number] {
+  const h = hex.replace("#", "");
+  return [parseInt(h.slice(0,2),16), parseInt(h.slice(2,4),16), parseInt(h.slice(4,6),16)];
+}
 
 function wrapText(doc: Doc, text: string, x: number, y: number, maxW: number, lineH: number): number {
   const lines = doc.splitTextToSize(text, maxW) as string[];
@@ -78,6 +84,17 @@ export function DownloadCV() {
       fill(doc, 255, 255, 255);
       doc.rect(0, 0, 3, HEADER_H, "F");
 
+      // QR Code — top right corner of header
+      const qrDataUrl: string = await QRCode.toDataURL("https://wilx.vercel.app/", {
+        width: 120, margin: 1,
+        color: { dark: "#ffffff", light: "#0a0a0a" },
+      });
+      const QR_SIZE = HEADER_H - 6;
+      doc.addImage(qrDataUrl, "PNG", W - PAD - QR_SIZE, 3, QR_SIZE, QR_SIZE);
+      // tiny label under QR
+      N(doc, 5.5); rgb(doc, 130, 130, 130);
+      doc.text("Scan for portfolio", W - PAD - QR_SIZE + QR_SIZE / 2, HEADER_H - 1, { align: "center" });
+
       // Name — clickable link to portfolio
       doc.setFont("helvetica", "bold"); doc.setFontSize(24);
       rgb(doc, 255, 255, 255);
@@ -86,7 +103,7 @@ export function DownloadCV() {
       N(doc, 8.5); rgb(doc, 170, 170, 170);
       doc.text("Technical Director  ·  Creative Strategist  ·  AI Solution Architect", PAD + 2, 23);
 
-      // Contact pills
+      // Contact row
       const contacts = ["+971 58 541 7606", "artali.create@gmail.com", "Dubai, UAE", "wilx.vercel.app"];
       let cx = PAD + 2;
       N(doc, 7.5); rgb(doc, 210, 210, 210);
@@ -249,25 +266,128 @@ export function DownloadCV() {
           ly = PAD + 4;
           ry = PAD + 4;
         }
-        B(doc, 8.5); rgb(doc, 20, 20, 20); doc.text(job.title, col2X, ry); ry += 4;
+        B(doc, 8.5); rgb(doc, 20, 20, 20); doc.text(job.title, col2X, ry); ry += 4.5;
         B(doc, 7.5); rgb(doc, 55, 55, 55); doc.text(job.company, col2X, ry);
         N(doc, 7); rgb(doc, 120, 120, 120);
         doc.text(`  ·  ${job.period}`, col2X + doc.getTextWidth(job.company), ry);
-        ry += 3.8;
-        I(doc, 7); rgb(doc, 150, 150, 150); doc.text(job.location, col2X, ry); ry += 4.2;
+        ry += 4;
+        I(doc, 7); rgb(doc, 150, 150, 150); doc.text(job.location, col2X, ry); ry += 4.5;
         N(doc, 7.5); rgb(doc, 65, 65, 65);
         for (const b of job.bullets) {
           doc.text("\u2013", col2X, ry);
           ry = wrapText(doc, b, col2X + 3.5, ry, rcW - 4, LINE_SM);
-          ry += 0.8;
+          ry += 1;
         }
-        ry += 3.5;
-        hRule(doc, ry - 2, col2X, W - PAD, 0.15);
+        ry += 4;
+        hRule(doc, ry - 2.5, col2X, W - PAD, 0.15);
       }
 
-      // ── PAGE 2 — PROJECTS & CREATIVE WORK ───────────────────────────
+      // ── PAGE 2 — TOOLS & ADOBE PROFICIENCY ─────────────────────────
       doc.addPage();
-      let py = PAD + 4;
+      let py = PAD + 6;
+
+      // Section: Adobe Creative Suite
+      py = sectionLabel(doc, "Adobe Creative Suite — Proficiency", PAD, py, W - PAD);
+      py += 2;
+
+      // Draw Adobe tool rows as coloured badge + bar
+      const adobeTools: [string, string, number, string][] = [
+        ["Ps", "Photoshop",        98, "#31A8FF"],
+        ["Ai", "Illustrator",       97, "#FF9A00"],
+        ["Id", "InDesign",          92, "#FF3366"],
+        ["Pr", "Premiere Pro",      90, "#9999FF"],
+        ["Ae", "After Effects",     85, "#9999FF"],
+        ["Au", "Audition",          78, "#00E4BB"],
+        ["Lr", "Lightroom",         95, "#31A8FF"],
+        ["XD", "Adobe XD",          82, "#FF61F6"],
+        ["Dw", "Dreamweaver",       70, "#4EB3CF"],
+        ["Br", "Bridge",            88, "#8A8A8A"],
+      ];
+
+      const COL_W = (W - PAD * 2 - 6) / 2;
+      const ROW_H = 9;
+      const BAR_W = COL_W - 32;
+      const BAR_H = 3;
+
+      for (let i = 0; i < adobeTools.length; i++) {
+        const [abbr, name, pct, color] = adobeTools[i];
+        const col = i % 2;
+        const row = Math.floor(i / 2);
+        const bx = PAD + col * (COL_W + 6);
+        const by = py + row * ROW_H;
+
+        // Coloured badge
+        fill(doc, ...hexToRgb(color));
+        doc.roundedRect(bx, by - 4, 8, 6, 1, 1, "F");
+        doc.setFont("helvetica", "bold"); doc.setFontSize(5);
+        rgb(doc, 255, 255, 255);
+        doc.text(abbr, bx + 4, by - 0.3, { align: "center" });
+
+        // Tool name
+        B(doc, 7.5); rgb(doc, 25, 25, 25);
+        doc.text(name, bx + 10, by - 0.3);
+
+        // Proficiency bar background
+        fill(doc, 230, 230, 230);
+        doc.roundedRect(bx + 10, by + 1.5, BAR_W, BAR_H, 1, 1, "F");
+        // Proficiency bar fill
+        fill(doc, ...hexToRgb(color));
+        doc.roundedRect(bx + 10, by + 1.5, BAR_W * (pct / 100), BAR_H, 1, 1, "F");
+        // Percentage label
+        N(doc, 6); rgb(doc, 100, 100, 100);
+        doc.text(`${pct}%`, bx + 10 + BAR_W + 2, by + 4);
+      }
+      py += Math.ceil(adobeTools.length / 2) * ROW_H + 8;
+
+      // Section: Design & AI Tools
+      py = sectionLabel(doc, "Design & AI Tools", PAD, py, W - PAD);
+      py += 2;
+
+      const otherTools: [string, number, string][] = [
+        ["Figma",               95, "#F24E1E"],
+        ["Framer",              75, "#0055FF"],
+        ["Canva",               88, "#00C4CC"],
+        ["ChatGPT / OpenAI",    92, "#10A37F"],
+        ["Gemini AI",           90, "#8E75F0"],
+        ["Midjourney",          85, "#000000"],
+        ["Runway ML",           72, "#1A1A1A"],
+        ["ElevenLabs",          70, "#FF6B35"],
+        ["Notion AI",           88, "#000000"],
+        ["GitHub Copilot",      92, "#6E40C9"],
+      ];
+      const OTHER_COL_W = (W - PAD * 2 - 6) / 2;
+      const OTHER_BAR_W = OTHER_COL_W - 32;
+
+      for (let i = 0; i < otherTools.length; i++) {
+        const [name, pct, color] = otherTools[i];
+        const col = i % 2;
+        const row = Math.floor(i / 2);
+        const bx = PAD + col * (OTHER_COL_W + 6);
+        const by = py + row * ROW_H;
+
+        // Coloured dot
+        const dotClr = color === "#000000" ? [60, 60, 60] : hexToRgb(color);
+        fill(doc, ...dotClr as [number, number, number]);
+        doc.circle(bx + 2, by - 1.5, 2, "F");
+
+        B(doc, 7.5); rgb(doc, 25, 25, 25);
+        doc.text(name, bx + 6, by - 0.3);
+
+        fill(doc, 230, 230, 230);
+        doc.roundedRect(bx + 6, by + 1.5, OTHER_BAR_W, BAR_H, 1, 1, "F");
+        fill(doc, ...dotClr as [number, number, number]);
+        doc.roundedRect(bx + 6, by + 1.5, OTHER_BAR_W * (pct / 100), BAR_H, 1, 1, "F");
+        N(doc, 6); rgb(doc, 100, 100, 100);
+        doc.text(`${pct}%`, bx + 6 + OTHER_BAR_W + 2, by + 4);
+      }
+      py += Math.ceil(otherTools.length / 2) * ROW_H + 8;
+
+      hRule(doc, py, PAD, W - PAD, 0.2);
+      py += 6;
+
+      // ── PAGE 3 — PROJECTS & CREATIVE WORK ───────────────────────────
+      doc.addPage();
+      py = PAD + 4;
 
       // Section: Key Projects
       py = sectionLabel(doc, "Key Projects & Ventures", PAD, py, W - PAD);

@@ -16,6 +16,7 @@ import { HeroSubtitle } from "./components/HeroSubtitle";
 import { LegoSection } from "./components/LegoSection";
 import { BrandMarketingSection } from "./components/BrandMarketingSection";
 import { DownloadCV } from "./components/DownloadCV";
+import { ToolsSection } from "./components/ToolsSection";
 
 const EMAIL = "artali.create@gmail.com";
 const GITHUB = "https://github.com/sharyyoru";
@@ -394,6 +395,25 @@ export default function Home() {
             </div>
           </div>
           <BrandMarketingSection />
+        </section>
+
+        {/* Tools & Proficiency Section */}
+        <section className="border-t-4 border-white bg-black px-4 py-16 sm:px-8 lg:px-12">
+          <div className="mb-8 flex items-center gap-4">
+            <svg className="h-8 w-8 shrink-0 text-white" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm1 17.93V18a1 1 0 0 0-2 0v1.93A8.001 8.001 0 0 1 4.07 13H6a1 1 0 0 0 0-2H4.07A8.001 8.001 0 0 1 11 4.07V6a1 1 0 0 0 2 0V4.07A8.001 8.001 0 0 1 19.93 11H18a1 1 0 0 0 0 2h1.93A8.001 8.001 0 0 1 13 19.93z"/>
+            </svg>
+            <TextReveal
+              text="Tools & Proficiency"
+              tag="h2"
+              className="text-3xl font-black uppercase tracking-tight sm:text-4xl md:text-5xl"
+            />
+            <span className="hidden h-4 flex-1 border-b-4 border-white sm:ml-2 sm:block" />
+          </div>
+          <p className="mb-10 max-w-2xl text-lg font-medium text-white/80">
+            Adobe Creative Suite, design tools, and AI platforms — used daily across brand, product, and technical work.
+          </p>
+          <ToolsSection />
         </section>
 
         {/* Contact Marquee */}

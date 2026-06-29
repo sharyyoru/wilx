@@ -259,7 +259,8 @@ export function DownloadCV() {
         },
       ];
 
-      let page1Done = false; // flag: has experience spilled to page 2?
+      let page1Done = false;
+      let lp2End = PAD + 4; // tracks bottom of left column on page 2
 
       for (const job of jobs) {
         const est = 4.5 + 4 + 4.5 + job.bullets.length * 5 + 10;
@@ -288,6 +289,8 @@ export function DownloadCV() {
             lp2 = wrapText(doc,
               "Founder of S-TASH, an independent e-commerce brand and creative collection. Responsible for product curation, brand identity, digital storefront, marketing strategy, and end-to-end fulfilment. Demonstrates applied creative entrepreneurship alongside technical and marketing expertise.",
               PAD, lp2, lcW, LINE_SM);
+
+            lp2End = lp2;
           }
           ly = PAD + 4;
           ry = PAD + 4;
@@ -306,7 +309,54 @@ export function DownloadCV() {
         }
         ry += 3;
         hRule(doc, ry, col2X, W - PAD, 0.15);
-        ry += 5; // gap AFTER rule before next title
+        ry += 5;
+      }
+
+      // ── FULL-WIDTH SECTIONS on page 2, below both columns ────────────
+      // Only render if experience spilled to page 2 and there's space
+      if (page1Done) {
+        const fullW = W - PAD * 2;
+        let fw = Math.max(ry, lp2End) + 10;
+
+        // Full-width divider
+        hRule(doc, fw - 2, PAD, W - PAD, 0.3);
+
+        // Section: Digital Marketing Approach
+        fw = sectionLabel(doc, "Digital Marketing Approach", PAD, fw, W - PAD);
+        fw += 1;
+        const dmCols: [string, string][] = [
+          ["Strategy & Planning", "Data-led campaign architecture spanning paid, organic, and owned channels. Full-funnel planning from awareness to conversion with KPI frameworks tailored per market."],
+          ["Brand & Content", "Platform-native content strategy across social, search, and CRM. Deep understanding of regional audience behaviour across GCC and MENA markets."],
+          ["Performance & Analytics", "Media buying, A/B optimisation, attribution modelling, and ROI measurement. Platforms: Meta Ads, Google Ads, TikTok, Programmatic, and SEO."],
+        ];
+        const dmColW = (fullW - 8) / 3;
+        for (let i = 0; i < dmCols.length; i++) {
+          const [title, desc] = dmCols[i];
+          const bx = PAD + i * (dmColW + 4);
+          B(doc, 7.5); rgb(doc, 20, 20, 20); doc.text(title, bx, fw);
+          N(doc, 7); rgb(doc, 70, 70, 70);
+          wrapText(doc, desc, bx, fw + 4, dmColW - 2, LINE_SM);
+        }
+        // Estimate height of tallest column (~4 lines)
+        fw += 4 + 4 * LINE_SM + 6;
+
+        hRule(doc, fw - 2, PAD, W - PAD, 0.15);
+
+        // Section: AI Development Solutions
+        fw = sectionLabel(doc, "AI Development Solutions", PAD, fw, W - PAD);
+        fw += 1;
+        const aiCols: [string, string][] = [
+          ["Architecture & Integration", "End-to-end AI solution design: LLM API integration, RAG pipelines, multi-agent orchestration, and vector database design for production-grade SaaS platforms."],
+          ["Applied AI Products", "Shipping AI-powered features in healthcare, wellness, events, and e-commerce — from Gemini-driven clinical summaries to LSTM biometric readiness models."],
+          ["AI Strategy & Consulting", "Translating business problems into AI roadmaps. Workshop facilitation, proof-of-concept development, and go-to-market planning for AI-native products."],
+        ];
+        for (let i = 0; i < aiCols.length; i++) {
+          const [title, desc] = aiCols[i];
+          const bx = PAD + i * (dmColW + 4);
+          B(doc, 7.5); rgb(doc, 20, 20, 20); doc.text(title, bx, fw);
+          N(doc, 7); rgb(doc, 70, 70, 70);
+          wrapText(doc, desc, bx, fw + 4, dmColW - 2, LINE_SM);
+        }
       }
 
       // ── PAGE 2 — TOOLS & ADOBE PROFICIENCY ─────────────────────────

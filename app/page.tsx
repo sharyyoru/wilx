@@ -14,6 +14,7 @@ import { TechArsenalBoard } from "./components/TechArsenalBoard";
 import { Car, Bot, Wrench } from "lucide-react";
 import { HeroSubtitle } from "./components/HeroSubtitle";
 import { LegoSection } from "./components/LegoSection";
+import { BrandMarketingSection } from "./components/BrandMarketingSection";
 
 const EMAIL = "artali.create@gmail.com";
 const GITHUB = "https://github.com/sharyyoru";
@@ -356,6 +357,27 @@ export default function Home() {
             Building worlds one brick at a time. Follow the builds on Instagram.
           </p>
           <LegoSection />
+        </section>
+
+        {/* Brand Marketing Section */}
+        <section className="border-t-4 border-white bg-black px-4 py-16 sm:px-8 lg:px-12">
+          <div className="mb-8 flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <svg className="h-8 w-8 text-white" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/>
+              </svg>
+              <TextReveal
+                text="Brand Marketing"
+                tag="h2"
+                className="text-3xl font-black uppercase tracking-tight sm:text-4xl md:text-5xl"
+              />
+            </div>
+            <span className="hidden h-4 flex-1 border-b-4 border-white sm:ml-6 sm:block" />
+          </div>
+          <p className="mb-8 max-w-3xl text-lg font-medium text-white/80">
+            Creative direction and concept development for global brands across the MENA region.
+          </p>
+          <BrandMarketingSection />
         </section>
 
         {/* Contact Marquee */}

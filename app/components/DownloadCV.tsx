@@ -260,7 +260,7 @@ export function DownloadCV() {
       ];
 
       for (const job of jobs) {
-        const est = 4 + 3.5 + 3.5 + job.bullets.length * 4.5 + 5;
+        const est = 4.5 + 4 + 4.5 + job.bullets.length * 5 + 10;
         if (ry + est > CONTENT_BOTTOM) {
           doc.addPage();
           ly = PAD + 4;
@@ -276,10 +276,11 @@ export function DownloadCV() {
         for (const b of job.bullets) {
           doc.text("\u2013", col2X, ry);
           ry = wrapText(doc, b, col2X + 3.5, ry, rcW - 4, LINE_SM);
-          ry += 1;
+          ry += 1.2;
         }
-        ry += 4;
-        hRule(doc, ry - 2.5, col2X, W - PAD, 0.15);
+        ry += 3;
+        hRule(doc, ry, col2X, W - PAD, 0.15);
+        ry += 5; // gap AFTER rule before next title
       }
 
       // ── PAGE 2 — TOOLS & ADOBE PROFICIENCY ─────────────────────────
@@ -383,11 +384,10 @@ export function DownloadCV() {
       py += Math.ceil(otherTools.length / 2) * ROW_H + 8;
 
       hRule(doc, py, PAD, W - PAD, 0.2);
-      py += 6;
+      py += 10;
 
-      // ── PAGE 3 — PROJECTS & CREATIVE WORK ───────────────────────────
-      doc.addPage();
-      py = PAD + 4;
+      // ── CONTINUE ON SAME PAGE — PROJECTS & CREATIVE WORK ─────────────
+      // (no forced page break — flow continues from tools)
 
       // Section: Key Projects
       py = sectionLabel(doc, "Key Projects & Ventures", PAD, py, W - PAD);

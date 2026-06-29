@@ -4,11 +4,11 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
 const VIDEOS = [
-  { src: "/lego/arc-dragon-mech_poses.mp4",          label: "Arc Dragon Mech" },
-  { src: "/lego/MasterMech_Poses.mp4",                label: "Master Mech" },
-  { src: "/lego/Kai-DemonHunter-Mech_6-igvid.mp4",   label: "Kai Demon Hunter" },
-  { src: "/lego/Cole-Asura-mech.mp4",                 label: "Cole Asura Mech" },
-  { src: "/lego/jay-raider-mech_instructions-ig.mp4", label: "Jay Raider Mech" },
+  { src: "/lego/arc-dragon-mech-small.mp4",  label: "Arc Dragon Mech" },
+  { src: "/lego/mastermech-small.mp4",        label: "Master Mech" },
+  { src: "/lego/kai-demonhunter-small.mp4",   label: "Kai Demon Hunter" },
+  { src: "/lego/cole-asura-small.mp4",        label: "Cole Asura Mech" },
+  { src: "/lego/jay-raider-small.mp4",        label: "Jay Raider Mech" },
 ];
 
 const LLOYD_IMAGES = [

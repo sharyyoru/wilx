@@ -10,19 +10,12 @@ import { DitherShaderBackground } from "./components/DitherShaderBackground";
 import { Marquee } from "./components/Marquee";
 import { ScrollReveal, TextReveal } from "./components/ScrollReveal";
 import { ScrollToExplore } from "./components/ScrollToExplore";
+import { TechArsenalBoard } from "./components/TechArsenalBoard";
 
 const EMAIL = "artali.create@gmail.com";
 const GITHUB = "https://github.com/sharyyoru";
 const LINKEDIN = "https://www.linkedin.com/in/wilson-ali-3a1156141/";
 
-const skills = [
-  "Next.js",
-  "React",
-  "Supabase",
-  "Laravel",
-  "Windsurf",
-  "AI Orchestration",
-];
 
 const projects = [
   {
@@ -98,13 +91,13 @@ export default function Home() {
                 Contact: {EMAIL}
               </a>
             </div>
-            <span className="text-sm font-bold uppercase tracking-wider">
+            <span className="inline-block border-2 border-white bg-black px-3 py-1 text-xs font-bold uppercase tracking-wider text-white">
               Dubai, UAE
             </span>
           </div>
 
           <div className="flex flex-col gap-6 py-12 md:py-20">
-            <h1 className="max-w-6xl font-black uppercase leading-[0.85] tracking-tighter text-[14vw] sm:text-[11vw] md:text-[10vw] lg:text-[9vw]">
+            <h1 className="max-w-6xl font-semibold uppercase leading-[0.9] tracking-tight text-[11vw] sm:text-[9vw] md:text-[8vw] lg:text-[7vw]">
               WILSON ALI
             </h1>
             <div className="max-w-3xl">
@@ -166,13 +159,13 @@ export default function Home() {
             <span className="hidden h-4 flex-1 border-b-4 border-white sm:ml-6 sm:block" />
           </div>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-12 md:auto-rows-[minmax(220px,auto)]">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             {/* Bento Box 1: The Bio */}
             <BentoCard
-              colSpan={5}
-              rowSpan={2}
+              colSpan={1}
+              rowSpan={1}
               color="yellow"
-              className="justify-between"
+              className="justify-between min-h-[280px]"
             >
               <BentoCardTag>Identity</BentoCardTag>
               <BentoCardTitle className="text-3xl sm:text-4xl">
@@ -192,10 +185,10 @@ export default function Home() {
 
             {/* Bento Box 2: ALiice */}
             <BentoCard
-              colSpan={7}
+              colSpan={1}
               rowSpan={1}
               color="orange"
-              className="justify-between"
+              className="justify-between min-h-[280px]"
             >
               <BentoCardTag>{projects[0].tag}</BentoCardTag>
               <BentoCardTitle className="text-3xl sm:text-4xl">
@@ -212,10 +205,10 @@ export default function Home() {
 
             {/* Bento Box 3: Code DXB */}
             <BentoCard
-              colSpan={4}
+              colSpan={1}
               rowSpan={1}
               color="blue"
-              className="justify-between"
+              className="justify-between min-h-[280px]"
             >
               <BentoCardTag>{projects[1].tag}</BentoCardTag>
               <BentoCardTitle>{projects[1].title}</BentoCardTitle>
@@ -229,10 +222,10 @@ export default function Home() {
 
             {/* Bento Box 4: Bold and Beyond */}
             <BentoCard
-              colSpan={4}
+              colSpan={1}
               rowSpan={1}
               color="pink"
-              className="justify-between"
+              className="justify-between min-h-[280px]"
             >
               <BentoCardTag>{projects[2].tag}</BentoCardTag>
               <BentoCardTitle>{projects[2].title}</BentoCardTitle>
@@ -244,27 +237,19 @@ export default function Home() {
               </BentoCardFooter>
             </BentoCard>
 
-            {/* Bento Box 5: Tech Arsenal (Marquee) */}
+            {/* Bento Box 5: Tech Arsenal (Flipping Board) */}
             <BentoCard
-              colSpan={12}
+              colSpan={2}
               rowSpan={1}
               color="dark"
-              className="overflow-hidden p-0"
+              className="col-span-full min-h-[200px] justify-between"
             >
-              <div className="flex h-full flex-col">
-                <div className="flex items-center justify-between border-b-4 border-white bg-black p-4 sm:p-6">
-                  <BentoCardTitle className="mb-0 text-white">Tech Arsenal</BentoCardTitle>
-                  <BentoCardTag>Always Evolving</BentoCardTag>
-                </div>
-                <div className="flex flex-1 items-center">
-                  <Marquee
-                    items={skills}
-                    speed={25}
-                    className="border-y-0"
-                    itemClassName="text-white"
-                    variant="dark"
-                  />
-                </div>
+              <div className="flex items-center justify-between">
+                <BentoCardTitle className="mb-0 text-white">Tech Arsenal</BentoCardTitle>
+                <BentoCardTag>Always Evolving</BentoCardTag>
+              </div>
+              <div className="mt-6 text-3xl font-black uppercase text-white sm:text-4xl">
+                <TechArsenalBoard />
               </div>
             </BentoCard>
           </div>

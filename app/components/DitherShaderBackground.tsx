@@ -18,8 +18,6 @@ const fragmentShaderSource = `
   uniform sampler2D u_image;
   uniform vec2 u_resolution;
   uniform vec2 u_imageResolution;
-  uniform vec2 u_mouse;
-  uniform float u_time;
   uniform float u_gridSize;
 
   // WebGL 1.0 compatible ordered dither — uses a 4x4 Bayer matrix encoded
@@ -70,12 +68,7 @@ const fragmentShaderSource = `
     // Compress into a dark range so dither pixels are dim, not full white
     float darkened = gray * 0.72;
 
-    vec2 mouseUV = u_mouse / u_resolution;
-    float dist = distance(v_texCoord, mouseUV);
-    float mouseGlow = smoothstep(0.4, 0.0, dist) * 0.3;
-    float ripple = sin(dist * 18.0 - u_time * 2.5) * 0.04 * smoothstep(0.5, 0.0, dist);
-
-    float threshold = bayer4(gl_FragCoord.xy) - mouseGlow + ripple;
+    float threshold = bayer4(gl_FragCoord.xy);
     float dithered = step(threshold, darkened);
 
     gl_FragColor = vec4(vec3(dithered), 1.0);
@@ -125,20 +118,16 @@ export function DitherShaderBackground({
   className?: string;
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const mouseRef = useRef({ x: 0, y: 0 });
-  const targetMouseRef = useRef({ x: 0, y: 0 });
   const rafRef = useRef<number>(0);
   const glRef = useRef<WebGLRenderingContext | null>(null);
   const programRef = useRef<WebGLProgram | null>(null);
   const uniformsRef = useRef<Record<string, WebGLUniformLocation | null>>({});
   const imageResolutionRef = useRef({ x: 1, y: 1 });
-  const startTimeRef = useRef(0);
   const failedRef = useRef(false);
   const readyRef = useRef(false);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    startTimeRef.current = Date.now();
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -236,8 +225,6 @@ export function DitherShaderBackground({
       u_image: gl.getUniformLocation(program, "u_image"),
       u_resolution: gl.getUniformLocation(program, "u_resolution"),
       u_imageResolution: gl.getUniformLocation(program, "u_imageResolution"),
-      u_mouse: gl.getUniformLocation(program, "u_mouse"),
-      u_time: gl.getUniformLocation(program, "u_time"),
       u_gridSize: gl.getUniformLocation(program, "u_gridSize"),
     };
     gl.uniform1i(uniformsRef.current.u_image, 0);
@@ -253,37 +240,12 @@ export function DitherShaderBackground({
       gl.viewport(0, 0, canvas.width, canvas.height);
     };
 
-    const handleMouseMove = (e: MouseEvent) => {
-      targetMouseRef.current = { x: e.clientX, y: window.innerHeight - e.clientY };
-    };
-
-    const handleTouchMove = (e: TouchEvent) => {
-      const touch = e.touches[0];
-      targetMouseRef.current = {
-        x: touch.clientX,
-        y: window.innerHeight - touch.clientY,
-      };
-    };
-
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-
     const render = () => {
       if (failedRef.current) return;
       if (!readyRef.current) {
         rafRef.current = requestAnimationFrame(render);
         return;
       }
-
-      mouseRef.current.x +=
-        (targetMouseRef.current.x - mouseRef.current.x) * 0.08;
-      mouseRef.current.y +=
-        (targetMouseRef.current.y - mouseRef.current.y) * 0.08;
-
-      const time = prefersReducedMotion
-        ? 0
-        : (Date.now() - startTimeRef.current) / 1000;
 
       gl.useProgram(programRef.current);
       gl.uniform2f(
@@ -296,12 +258,6 @@ export function DitherShaderBackground({
         imageResolutionRef.current.x,
         imageResolutionRef.current.y
       );
-      gl.uniform2f(
-        uniformsRef.current.u_mouse,
-        mouseRef.current.x,
-        mouseRef.current.y
-      );
-      gl.uniform1f(uniformsRef.current.u_time, time);
       gl.uniform1f(uniformsRef.current.u_gridSize, 6.0);
 
       gl.drawArrays(gl.TRIANGLES, 0, 6);
@@ -310,16 +266,12 @@ export function DitherShaderBackground({
 
     resize();
     window.addEventListener("resize", resize);
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("touchmove", handleTouchMove, { passive: true });
 
     rafRef.current = requestAnimationFrame(render);
 
     return () => {
       cancelAnimationFrame(rafRef.current);
       window.removeEventListener("resize", resize);
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("touchmove", handleTouchMove);
       gl.deleteProgram(program);
       gl.deleteShader(vertexShader);
       gl.deleteShader(fragmentShader);

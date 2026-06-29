@@ -259,10 +259,36 @@ export function DownloadCV() {
         },
       ];
 
+      let page1Done = false; // flag: has experience spilled to page 2?
+
       for (const job of jobs) {
         const est = 4.5 + 4 + 4.5 + job.bullets.length * 5 + 10;
         if (ry + est > CONTENT_BOTTOM) {
           doc.addPage();
+          if (!page1Done) {
+            // ── LEFT COLUMN PAGE 2: Creative Pursuits + S-TASH ──────────
+            page1Done = true;
+            let lp2 = PAD + 4;
+
+            lp2 = sectionLabel(doc, "Creative Pursuits", PAD, lp2, col2X - 3);
+            B(doc, 8); rgb(doc, 20, 20, 20);
+            doc.text("Lego Custom Builds", PAD, lp2); lp2 += 4.5;
+            N(doc, 7.5); rgb(doc, 70, 70, 70);
+            lp2 = wrapText(doc,
+              "Avid Lego custom builder specialising in Ninjago mech designs and original MOC engineering. Builds: Arc Dragon Mech, Life Dragon Mech, Ras Rage Mech, Cole Asura Mech, Kai Demon Hunter Mech, Jay Raider Mech, Master Mech. Each build applies structural engineering, aesthetic design, and original concept development.",
+              PAD, lp2, lcW, LINE_SM);
+            lp2 += 8;
+
+            lp2 = sectionLabel(doc, "Entrepreneurship", PAD, lp2, col2X - 3);
+            B(doc, 8); rgb(doc, 20, 20, 20);
+            doc.text("S-TASH — Small Business Owner", PAD, lp2); lp2 += 4.5;
+            I(doc, 7); rgb(doc, 110, 110, 110);
+            doc.textWithLink("s-tash.store", PAD, lp2, { url: "https://www.s-tash.store/" }); lp2 += 5;
+            N(doc, 7.5); rgb(doc, 70, 70, 70);
+            lp2 = wrapText(doc,
+              "Founder of S-TASH, an independent e-commerce brand and creative collection. Responsible for product curation, brand identity, digital storefront, marketing strategy, and end-to-end fulfilment. Demonstrates applied creative entrepreneurship alongside technical and marketing expertise.",
+              PAD, lp2, lcW, LINE_SM);
+          }
           ly = PAD + 4;
           ry = PAD + 4;
         }
@@ -386,10 +412,11 @@ export function DownloadCV() {
       hRule(doc, py, PAD, W - PAD, 0.2);
       py += 10;
 
-      // ── CONTINUE ON SAME PAGE — PROJECTS & CREATIVE WORK ─────────────
-      // (no forced page break — flow continues from tools)
+      // ── CONTINUE — PROJECTS & CREATIVE WORK ─────────────────────────
+      // Flow continues after tools; each block guards its own page break.
 
       // Section: Key Projects
+      if (py + 12 > CONTENT_BOTTOM) { doc.addPage(); py = PAD + 4; }
       py = sectionLabel(doc, "Key Projects & Ventures", PAD, py, W - PAD);
       py += 1;
 
@@ -422,9 +449,9 @@ export function DownloadCV() {
         hRule(doc, py - 4, PAD, W - PAD, 0.15);
       }
 
-      // Section: Featured AI Projects
-      py += 2;
-      if (py + 10 > CONTENT_BOTTOM) { doc.addPage(); py = PAD + 4; }
+      // Section: Featured AI Projects — ensure header + at least one entry fit together
+      py += 4;
+      if (py + 30 > CONTENT_BOTTOM) { doc.addPage(); py = PAD + 4; }
       py = sectionLabel(doc, "Featured AI Projects", PAD, py, W - PAD);
       py += 1;
 
@@ -518,14 +545,8 @@ export function DownloadCV() {
         hRule(doc, py - 3, PAD, W - PAD, 0.15);
       }
 
-      // Section: Lego Custom Builds
-      py += 3;
-      if (py + 10 > CONTENT_BOTTOM) { doc.addPage(); py = PAD + 4; }
-      py = sectionLabel(doc, "Creative Pursuits — Lego Custom Builds", PAD, py, W - PAD);
-      N(doc, 8); rgb(doc, 55, 55, 55);
-      py = wrapText(doc,
-        "Avid Lego custom builder specialising in Ninjago mech designs and original MOC (My Own Creation) engineering. Custom builds include: Arc Dragon Mech, Life Dragon Mech, Ras Rage Mech, Cole Asura Mech, Kai Demon Hunter Mech, Jay Raider Mech, and Master Mech. Each build involves structural engineering, aesthetic design, and original concept development — skills that directly inform approach to product design and systems architecture.",
-        PAD, py, W - PAD * 2, LINE_MD);
+      // Creative Pursuits + S-TASH only appear in the left column of page 2 (above).
+      // Skip re-rendering them here to avoid duplication.
 
       // ── RENDER FOOTERS ───────────────────────────────────────────────
       const totalPages = doc.getNumberOfPages();

@@ -159,8 +159,8 @@ export default function Home() {
             <span className="hidden h-4 flex-1 border-b-4 border-white sm:ml-6 sm:block" />
           </div>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            {/* Bento Box 1: The Bio */}
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            {/* Row 1: Bio (1 col) + Tech Arsenal (2 cols) */}
             <BentoCard
               colSpan={1}
               rowSpan={1}
@@ -183,12 +183,28 @@ export default function Home() {
               </BentoCardFooter>
             </BentoCard>
 
-            {/* Bento Box 2: ALiice */}
+            {/* Tech Arsenal (2 cols) */}
             <BentoCard
-              colSpan={1}
+              colSpan={2}
+              rowSpan={1}
+              color="dark"
+              className="justify-between min-h-[280px]"
+            >
+              <div className="flex items-center justify-between">
+                <BentoCardTitle className="mb-0 text-white">Tech Arsenal</BentoCardTitle>
+                <BentoCardTag>Always Evolving</BentoCardTag>
+              </div>
+              <div className="mt-6 text-3xl font-black uppercase text-white sm:text-4xl">
+                <TechArsenalBoard />
+              </div>
+            </BentoCard>
+
+            {/* Row 2: ALiice — full width (3 cols) */}
+            <BentoCard
+              colSpan={3}
               rowSpan={1}
               color="orange"
-              className="justify-between min-h-[280px]"
+              className="justify-between min-h-[220px]"
             >
               <BentoCardTag>{projects[0].tag}</BentoCardTag>
               <BentoCardTitle className="text-3xl sm:text-4xl">
@@ -203,7 +219,7 @@ export default function Home() {
               </BentoCardFooter>
             </BentoCard>
 
-            {/* Bento Box 3: Code DXB */}
+            {/* Row 3: Code DXB + Bold and Beyond */}
             <BentoCard
               colSpan={1}
               rowSpan={1}
@@ -220,9 +236,8 @@ export default function Home() {
               </BentoCardFooter>
             </BentoCard>
 
-            {/* Bento Box 4: Bold and Beyond */}
             <BentoCard
-              colSpan={1}
+              colSpan={2}
               rowSpan={1}
               color="pink"
               className="justify-between min-h-[280px]"
@@ -235,22 +250,6 @@ export default function Home() {
                   Wellness Tech
                 </span>
               </BentoCardFooter>
-            </BentoCard>
-
-            {/* Bento Box 5: Tech Arsenal (Flipping Board) */}
-            <BentoCard
-              colSpan={2}
-              rowSpan={1}
-              color="dark"
-              className="col-span-full min-h-[200px] justify-between"
-            >
-              <div className="flex items-center justify-between">
-                <BentoCardTitle className="mb-0 text-white">Tech Arsenal</BentoCardTitle>
-                <BentoCardTag>Always Evolving</BentoCardTag>
-              </div>
-              <div className="mt-6 text-3xl font-black uppercase text-white sm:text-4xl">
-                <TechArsenalBoard />
-              </div>
             </BentoCard>
           </div>
         </section>

@@ -337,8 +337,6 @@ export function DownloadCV() {
         // Estimate height of tallest column (~4 lines)
         fw += 4 + 4 * LINE_SM + 6;
 
-        hRule(doc, fw - 2, PAD, W - PAD, 0.15);
-
         // Section: AI Development Solutions
         fw = sectionLabel(doc, "AI Development Solutions", PAD, fw, W - PAD);
         fw += 1;

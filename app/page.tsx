@@ -128,6 +128,28 @@ export default function Home() {
                   LinkedIn
                 </a>
               </div>
+              <div className="mt-8 border-t border-white/20 pt-6">
+                <p className="mb-3 text-xs font-bold uppercase tracking-widest text-white/50">
+                  Featured AI Projects
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  {[
+                    { label: "Autonomous Vehicle AI", slug: "autonomous-vehicle", icon: "🚗" },
+                    { label: "AI Virtual Assistant", slug: "ai-assistant", icon: "🤖" },
+                    { label: "Predictive Maintenance", slug: "predictive-maintenance", icon: "⚙️" },
+                  ].map((p) => (
+                    <Link
+                      key={p.slug}
+                      href={`/projects/${p.slug}`}
+                      className="group relative inline-flex items-center gap-2 overflow-hidden border-2 border-white/60 bg-white/5 px-4 py-2 text-sm font-bold uppercase tracking-wider text-white backdrop-blur-sm transition-all duration-300 hover:border-white hover:bg-white hover:text-black"
+                    >
+                      <span className="text-base">{p.icon}</span>
+                      <span>{p.label}</span>
+                      <span className="ml-1 translate-x-0 transition-transform duration-300 group-hover:translate-x-1">→</span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
 

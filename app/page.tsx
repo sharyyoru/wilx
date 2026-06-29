@@ -374,9 +374,37 @@ export default function Home() {
             </div>
             <span className="hidden h-4 flex-1 border-b-4 border-white sm:ml-6 sm:block" />
           </div>
-          <p className="mb-8 max-w-3xl text-lg font-medium text-white/80">
-            Creative direction and concept development for global brands across the MENA region.
-          </p>
+          <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <p className="max-w-xl text-lg font-medium text-white/80">
+              Creative direction and concept development for global brands across the MENA region.
+            </p>
+            <div className="flex flex-wrap gap-3 shrink-0">
+              {/* Lipton */}
+              <div className="flex items-center gap-2 border border-white/15 bg-white/5 px-3 py-2 rounded-sm">
+                <svg viewBox="0 0 24 24" className="h-5 w-5 shrink-0" fill="none">
+                  <circle cx="12" cy="12" r="10" fill="#FFCC00"/>
+                  <path d="M12 6c-3.3 0-6 2.7-6 6s2.7 6 6 6 6-2.7 6-6-2.7-6-6-6zm0 2c.6 0 1.2.1 1.7.3L8.3 13.7C8.1 13.2 8 12.6 8 12c0-2.2 1.8-4 4-4zm0 8c-.6 0-1.2-.1-1.7-.3l5.4-5.4c.2.5.3 1.1.3 1.7 0 2.2-1.8 4-4 4z" fill="#000"/>
+                </svg>
+                <span className="text-xs font-black uppercase tracking-widest text-white">Lipton</span>
+              </div>
+              {/* McDonald's */}
+              <div className="flex items-center gap-2 border border-white/15 bg-white/5 px-3 py-2 rounded-sm">
+                <svg viewBox="0 0 24 24" className="h-5 w-5 shrink-0" fill="#DA291C">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
+                  <path d="M7 8h1.5l1.5 5 1.5-5H13l1.5 5 1.5-5H17l-2.25 8H13l-1-3.5L11 16H9.25L7 8z" fill="#FFBC0D"/>
+                </svg>
+                <span className="text-xs font-black uppercase tracking-widest text-white">McDonald&apos;s</span>
+              </div>
+              {/* Total */}
+              <div className="flex items-center gap-2 border border-white/15 bg-white/5 px-3 py-2 rounded-sm">
+                <svg viewBox="0 0 24 24" className="h-5 w-5 shrink-0" fill="none">
+                  <rect width="24" height="24" rx="2" fill="#E31E24"/>
+                  <text x="3" y="17" fontSize="11" fontWeight="900" fill="#fff" fontFamily="sans-serif">TOT</text>
+                </svg>
+                <span className="text-xs font-black uppercase tracking-widest text-white">Total</span>
+              </div>
+            </div>
+          </div>
           <BrandMarketingSection />
         </section>
 

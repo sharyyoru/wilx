@@ -81,33 +81,36 @@ export function BrandMarketingSection() {
             onEnded={() => setPlaying(false)}
           />
 
-          {/* Play overlay */}
-          {!playing && (
-            <button
-              onClick={handlePlayPause}
-              className="absolute inset-0 flex items-center justify-center group"
-              aria-label="Play"
+          {/* Play / Pause centered overlay */}
+          <button
+            onClick={handlePlayPause}
+            aria-label={playing ? "Pause" : "Play"}
+            className="absolute inset-0 flex items-center justify-center group"
+          >
+            {/* Always-visible circle, fades out while playing unless hovered */}
+            <div
+              className="flex h-16 w-16 items-center justify-center rounded-full border border-white/30 bg-black/40 backdrop-blur-sm transition-all group-hover:bg-black/60 group-hover:scale-110"
+              style={{ opacity: playing ? 0 : 1, transition: "opacity 0.2s, transform 0.2s, background 0.2s" }}
             >
-              <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white/10 border border-white/30 backdrop-blur-sm transition-all group-hover:bg-white/20 group-hover:scale-110">
-                <svg className="h-6 w-6 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+              {playing ? (
+                <svg className="h-6 w-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                </svg>
+              ) : (
+                <svg className="h-6 w-6 text-white" fill="currentColor" viewBox="0 0 24 24" style={{ marginLeft: "3px" }}>
                   <path d="M8 5v14l11-7z" />
                 </svg>
+              )}
+            </div>
+            {/* Show pause on hover while playing */}
+            {playing && (
+              <div className="absolute flex h-16 w-16 items-center justify-center rounded-full border border-white/30 bg-black/40 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                <svg className="h-6 w-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                </svg>
               </div>
-            </button>
-          )}
-
-          {/* Pause button (visible while playing) */}
-          {playing && (
-            <button
-              onClick={handlePlayPause}
-              className="absolute bottom-4 left-4 flex h-9 w-9 items-center justify-center rounded-full bg-black/60 border border-white/20 backdrop-blur-sm opacity-0 hover:opacity-100 transition-opacity group-hover:opacity-100"
-              aria-label="Pause"
-            >
-              <svg className="h-4 w-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
-              </svg>
-            </button>
-          )}
+            )}
+          </button>
 
           {/* Brand colour strip */}
           <div

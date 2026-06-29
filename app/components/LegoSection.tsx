@@ -1,100 +1,130 @@
 "use client";
 
-import { useEffect } from "react";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 
-export const INSTAGRAM_REELS: { url: string; caption: string }[] = [
-  { url: "https://www.instagram.com/p/DWSIVyMCN7q/", caption: "Lego Build 1" },
-  { url: "https://www.instagram.com/p/DWQ1uTziN-m/", caption: "Lego Build 2" },
-  { url: "https://www.instagram.com/p/DWU7Y9YCDtx/", caption: "Lego Build 3" },
-  { url: "https://www.instagram.com/p/DWKR_ijiAgp/", caption: "Lego Build 4" },
-  { url: "https://www.instagram.com/p/DWH8C7qCD8U/", caption: "Lego Build 5" },
-  { url: "https://www.instagram.com/p/DWFau0yiG2w/", caption: "Lego Build 6" },
-  { url: "https://www.instagram.com/p/DWBgnEICJt2/", caption: "Lego Build 7" },
-  { url: "https://www.instagram.com/p/DWBfgrmiK9o/", caption: "Lego Build 8" },
-  { url: "https://www.instagram.com/p/DV-1wCECLgd/", caption: "Lego Build 9" },
-  { url: "https://www.instagram.com/p/DV9IttJCB3z/", caption: "Lego Build 10 (Slideshow)" },
-  { url: "https://www.instagram.com/p/DV84YeiCAlm/", caption: "Lego Build 11" },
-  { url: "https://www.instagram.com/p/DV8NylICH_j/", caption: "Lego Build 12" },
+const VIDEOS = [
+  { src: "/lego/arc-dragon-mech_poses.mp4",        label: "Arc Dragon Mech" },
+  { src: "/lego/MasterMech_Poses.mp4",              label: "Master Mech Poses" },
+  { src: "/lego/Kai-DemonHunter-Mech_6-igvid.mp4", label: "Kai Demon Hunter" },
+  { src: "/lego/Cole-Asura-mech.mp4",               label: "Cole Asura Mech" },
+  { src: "/lego/jay-raider-mech_instructions-ig.mp4", label: "Jay Raider Mech" },
 ];
 
-const BENTO_LAYOUT = [
-  "md:col-span-2 md:row-span-2",
-  "md:col-span-1 md:row-span-1",
-  "md:col-span-1 md:row-span-1",
-  "md:col-span-1 md:row-span-2",
-  "md:col-span-1 md:row-span-1",
-  "md:col-span-1 md:row-span-1",
-  "md:col-span-1 md:row-span-1",
-  "md:col-span-2 md:row-span-1",
-  "md:col-span-1 md:row-span-1",
-  "md:col-span-1 md:row-span-1",
-  "md:col-span-1 md:row-span-1",
-  "md:col-span-1 md:row-span-1",
+const LLOYD_IMAGES = [
+  "/lego/Lloyd Dragon Mech/Life-Dragon-Mech.jpg",
+  "/lego/Lloyd Dragon Mech/Life-Dragon-Mech_2.jpg",
+  "/lego/Lloyd Dragon Mech/Life-Dragon-Mech_3.jpg",
+  "/lego/Lloyd Dragon Mech/Life-Dragon-Mech_5.jpg",
+  "/lego/Lloyd Dragon Mech/Life-Dragon-Mech_6.jpg",
+  "/lego/Lloyd Dragon Mech/Life-Dragon-Mech_7.jpg",
+  "/lego/Lloyd Dragon Mech/LifeDragonMech01.jpg",
+  "/lego/Lloyd Dragon Mech/LifeDragonMech01_2.jpg",
+  "/lego/Lloyd Dragon Mech/LifeDragonMech01_3.jpg",
+  "/lego/Lloyd Dragon Mech/LifeDragonMech01_4.jpg",
+  "/lego/Lloyd Dragon Mech/LifeDragonMech01_5.jpg",
+  "/lego/Lloyd Dragon Mech/LifeDragonMech01_6.jpg",
+  "/lego/Lloyd Dragon Mech/LifeDragonMech01_7.jpg",
+  "/lego/Lloyd Dragon Mech/LifeDragonMech01_8.jpg",
+  "/lego/Lloyd Dragon Mech/LifeDragonMech01_9.jpg",
+  "/lego/Lloyd Dragon Mech/LifeDragonMech01_10.jpg",
 ];
 
-function ReelCard({ reel, className }: { reel: typeof INSTAGRAM_REELS[number]; className: string }) {
-  const isPlaceholder = reel.url.includes("PLACEHOLDER");
+const RAS_IMAGES = [
+  "/lego/Ras Rage Mech/Ras-Rage-Mech.jpg",
+  "/lego/Ras Rage Mech/Ras-Rage-Mech_2.jpg",
+  "/lego/Ras Rage Mech/Ras-Rage-Mech-head.jpg",
+  "/lego/Ras Rage Mech/Ras-Rage-Mech-head-with-jaw.jpg",
+  "/lego/Ras Rage Mech/Ras-Rage-Mech-body.jpg",
+  "/lego/Ras Rage Mech/Ras-Rage-Mech-body_wolf-form.jpg",
+  "/lego/Ras Rage Mech/Ras-Rage-Mech-full.jpg",
+  "/lego/Ras Rage Mech/Ras-Rage-Mech_Poses.jpg",
+  "/lego/Ras Rage Mech/Ras-Rage-Mech_Poses_2.jpg",
+  "/lego/Ras Rage Mech/Ras-Rage-Mech_Poses_3.jpg",
+  "/lego/Ras Rage Mech/Ras-Rage-Mech_Poses_4.jpg",
+  "/lego/Ras Rage Mech/Ras-Rage-Mech_Poses_5.jpg",
+  "/lego/Ras Rage Mech/Ras-Rage-Mech_Poses_6.jpg",
+  "/lego/Ras Rage Mech/Ras-Rage-Mech_Poses_7.jpg",
+  "/lego/Ras Rage Mech/Ras-Rage-Mech_Poses_8.jpg",
+  "/lego/Ras Rage Mech/Ras-Rage-Mech_Poses_9.jpg",
+];
+
+function VideoCard({ src, label, className }: { src: string; label: string; className?: string }) {
+  return (
+    <div className={`group relative overflow-hidden bg-black ${className ?? ""}`}>
+      <video
+        src={src}
+        autoPlay
+        muted
+        loop
+        playsInline
+        className="h-full w-full object-cover"
+      />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-3">
+        <p className="text-xs font-bold uppercase tracking-wider text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+          {label}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function SlideshowCard({ images, label, className }: { images: string[]; label: string; className?: string }) {
+  const [idx, setIdx] = useState(0);
+  const [fading, setFading] = useState(false);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setFading(true);
+      setTimeout(() => {
+        setIdx((i) => (i + 1) % images.length);
+        setFading(false);
+      }, 400);
+    }, 2800);
+    return () => clearInterval(id);
+  }, [images.length]);
 
   return (
-    <div
-      className={`group relative overflow-hidden border-2 border-white/20 bg-white/5 transition-all duration-300 hover:border-white/60 ${className}`}
-      style={{ minHeight: "200px" }}
-    >
-      {isPlaceholder ? (
-        <div className="flex h-full min-h-[200px] flex-col items-center justify-center gap-3 p-4 text-center">
-          <div className="h-8 w-8 rounded-full border-2 border-white/20 bg-white/10 flex items-center justify-center">
-            <svg className="h-4 w-4 text-white/40" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M8 6.82v10.36c0 .79.87 1.27 1.54.84l8.14-5.18a1 1 0 000-1.69L9.54 5.98A.998.998 0 008 6.82z"/>
-            </svg>
-          </div>
-          <p className="text-xs text-white/30 font-mono uppercase tracking-wider">
-            Paste reel URL<br />in LegoSection.tsx
-          </p>
-          <p className="text-[10px] text-white/20 font-mono">{reel.caption}</p>
+    <div className={`group relative overflow-hidden bg-black ${className ?? ""}`}>
+      <Image
+        src={images[idx]}
+        alt={label}
+        fill
+        className="object-cover transition-opacity duration-400"
+        style={{ opacity: fading ? 0 : 1 }}
+        sizes="(max-width: 768px) 100vw, 50vw"
+      />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+        <p className="text-sm font-black uppercase tracking-wider text-white">{label}</p>
+        <div className="mt-2 flex gap-1">
+          {images.map((_, i) => (
+            <div
+              key={i}
+              className="h-0.5 flex-1 rounded-full transition-colors duration-300"
+              style={{ background: i === idx ? "#fff" : "rgba(255,255,255,0.3)" }}
+            />
+          ))}
         </div>
-      ) : (
-        <blockquote
-          className="instagram-media h-full w-full"
-          data-instgrm-permalink={`${reel.url}?utm_source=ig_embed`}
-          data-instgrm-version="14"
-          data-instgrm-captioned
-          style={{
-            background: "#000",
-            border: 0,
-            borderRadius: 0,
-            boxShadow: "none",
-            display: "block",
-            margin: 0,
-            minWidth: "100%",
-            padding: 0,
-            width: "100%",
-          }}
-        />
-      )}
+      </div>
     </div>
   );
 }
 
 export function LegoSection() {
-  useEffect(() => {
-    const hasReal = INSTAGRAM_REELS.some((r) => !r.url.includes("PLACEHOLDER"));
-    if (!hasReal) return;
-    if (typeof window !== "undefined" && (window as Window & { instgrm?: { Embeds?: { process?: () => void } } }).instgrm?.Embeds?.process) {
-      (window as Window & { instgrm?: { Embeds?: { process?: () => void } } }).instgrm!.Embeds!.process!();
-      return;
-    }
-    const script = document.createElement("script");
-    script.src = "https://www.instagram.com/embed.js";
-    script.async = true;
-    document.body.appendChild(script);
-    return () => { document.body.removeChild(script); };
-  }, []);
-
   return (
-    <div className="grid grid-cols-2 gap-3 md:grid-cols-4" style={{ gridAutoRows: "minmax(200px, auto)" }}>
-      {INSTAGRAM_REELS.map((reel, i) => (
-        <ReelCard key={i} reel={reel} className={BENTO_LAYOUT[i] ?? ""} />
-      ))}
+    <div className="grid grid-cols-2 gap-3 md:grid-cols-4" style={{ gridAutoRows: "320px" }}>
+      {/* Row 1: Big hero video (2×2) + 2 portrait videos */}
+      <VideoCard src={VIDEOS[0].src} label={VIDEOS[0].label} className="col-span-2 row-span-2" />
+      <VideoCard src={VIDEOS[1].src} label={VIDEOS[1].label} className="col-span-1 row-span-1" />
+      <VideoCard src={VIDEOS[2].src} label={VIDEOS[2].label} className="col-span-1 row-span-1" />
+
+      {/* Row 2 right: Lloyd slideshow tall */}
+      <SlideshowCard images={LLOYD_IMAGES} label="Lloyd — Life Dragon Mech" className="col-span-2 row-span-2" />
+
+      {/* Row 3: 2 more videos + Ras slideshow */}
+      <VideoCard src={VIDEOS[3].src} label={VIDEOS[3].label} className="col-span-1 row-span-1" />
+      <VideoCard src={VIDEOS[4].src} label={VIDEOS[4].label} className="col-span-1 row-span-1" />
+      <SlideshowCard images={RAS_IMAGES} label="Ras — Rage Mech" className="col-span-2 row-span-2" />
     </div>
   );
 }

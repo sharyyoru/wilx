@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { ReactNode } from "react";
 import { BentoCardTag } from "./BentoCard";
-import { DitherShaderBackground } from "./DitherShaderBackground";
 import { TextReveal } from "./ScrollReveal";
 
 export type ProjectShellProps = {
@@ -20,10 +19,8 @@ export function ProjectShell({
   children,
 }: ProjectShellProps) {
   return (
-    <div className="relative flex min-h-screen flex-col bg-black text-white">
-      <DitherShaderBackground />
-
-      <main className="relative z-10 flex flex-1 flex-col">
+    <div className="flex min-h-screen flex-col bg-black text-white">
+      <main className="flex flex-1 flex-col">
         <section className="border-b-4 border-white px-4 py-8 sm:px-8 lg:px-12">
           <Link
             href="/"

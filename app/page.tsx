@@ -84,8 +84,8 @@ export default function Home() {
         <section className="relative flex min-h-[90vh] flex-col justify-between border-b-4 border-white px-4 py-8 sm:px-8 lg:px-12">
           <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
             <div className="flex flex-wrap gap-3">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/60 bg-emerald-400/10 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-emerald-400">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-black">
+                <span className="h-1.5 w-1.5 rounded-full bg-black animate-pulse" />
                 Available for Select Projects
               </span>
               <a
@@ -224,57 +224,61 @@ export default function Home() {
             </BentoCard>
 
             {/* Row 2: ALiice — full width (3 cols) */}
-            <BentoCard
-              colSpan={3}
-              rowSpan={1}
-              color="orange"
-              className="justify-between min-h-[220px]"
-            >
-              <BentoCardTag>{projects[0].tag}</BentoCardTag>
-              <BentoCardTitle className="text-3xl sm:text-4xl">
-                {projects[0].title}
-              </BentoCardTitle>
-              <BentoCardBody>{projects[0].description}</BentoCardBody>
-              <BentoCardFooter>
-                <span className="text-sm font-bold uppercase tracking-wider">
-                  View Case Study
-                </span>
-                <span className="text-2xl">→</span>
-              </BentoCardFooter>
-            </BentoCard>
+            <Link href="/projects/aliice" className="contents">
+              <BentoCard
+                colSpan={3}
+                rowSpan={1}
+                color="orange"
+                className="justify-between min-h-[220px] cursor-pointer transition-opacity hover:opacity-90"
+              >
+                <BentoCardTag>{projects[0].tag}</BentoCardTag>
+                <BentoCardTitle className="text-3xl sm:text-4xl">
+                  {projects[0].title}
+                </BentoCardTitle>
+                <BentoCardBody>{projects[0].description}</BentoCardBody>
+                <BentoCardFooter>
+                  <span className="text-sm font-bold uppercase tracking-wider">
+                    View Case Study
+                  </span>
+                  <span className="text-2xl">→</span>
+                </BentoCardFooter>
+              </BentoCard>
+            </Link>
 
             {/* Row 3: Code DXB + Bold and Beyond */}
-            <BentoCard
-              colSpan={1}
-              rowSpan={1}
-              color="blue"
-              className="justify-between min-h-[280px]"
-            >
-              <BentoCardTag>{projects[1].tag}</BentoCardTag>
-              <BentoCardTitle>{projects[1].title}</BentoCardTitle>
-              <BentoCardBody>{projects[1].description}</BentoCardBody>
-              <BentoCardFooter>
-                <span className="text-sm font-bold uppercase tracking-wider">
-                  Oct 2026
-                </span>
-              </BentoCardFooter>
-            </BentoCard>
+            <Link href="/projects/code-dxb" className="contents">
+              <BentoCard
+                colSpan={1}
+                rowSpan={1}
+                color="blue"
+                className="justify-between min-h-[280px] cursor-pointer transition-opacity hover:opacity-90"
+              >
+                <BentoCardTag>{projects[1].tag}</BentoCardTag>
+                <BentoCardTitle>{projects[1].title}</BentoCardTitle>
+                <BentoCardBody>{projects[1].description}</BentoCardBody>
+                <BentoCardFooter>
+                  <span className="text-sm font-bold uppercase tracking-wider">View Case Study</span>
+                  <span className="text-2xl">→</span>
+                </BentoCardFooter>
+              </BentoCard>
+            </Link>
 
-            <BentoCard
-              colSpan={2}
-              rowSpan={1}
-              color="pink"
-              className="justify-between min-h-[280px]"
-            >
-              <BentoCardTag>{projects[2].tag}</BentoCardTag>
-              <BentoCardTitle>{projects[2].title}</BentoCardTitle>
-              <BentoCardBody>{projects[2].description}</BentoCardBody>
-              <BentoCardFooter>
-                <span className="text-sm font-bold uppercase tracking-wider">
-                  Wellness Tech
-                </span>
-              </BentoCardFooter>
-            </BentoCard>
+            <Link href="/projects/bold-and-beyond" className="contents">
+              <BentoCard
+                colSpan={2}
+                rowSpan={1}
+                color="pink"
+                className="justify-between min-h-[280px] cursor-pointer transition-opacity hover:opacity-90"
+              >
+                <BentoCardTag>{projects[2].tag}</BentoCardTag>
+                <BentoCardTitle>{projects[2].title}</BentoCardTitle>
+                <BentoCardBody>{projects[2].description}</BentoCardBody>
+                <BentoCardFooter>
+                  <span className="text-sm font-bold uppercase tracking-wider">View Case Study</span>
+                  <span className="text-2xl">→</span>
+                </BentoCardFooter>
+              </BentoCard>
+            </Link>
           </div>
         </section>
 

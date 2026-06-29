@@ -12,6 +12,8 @@ import { ScrollReveal, TextReveal } from "./components/ScrollReveal";
 import { ScrollToExplore } from "./components/ScrollToExplore";
 import { TechArsenalBoard } from "./components/TechArsenalBoard";
 import { Car, Bot, Wrench } from "lucide-react";
+import { HeroSubtitle } from "./components/HeroSubtitle";
+import { LegoSection } from "./components/LegoSection";
 
 const EMAIL = "artali.create@gmail.com";
 const GITHUB = "https://github.com/sharyyoru";
@@ -82,7 +84,8 @@ export default function Home() {
         <section className="relative flex min-h-[90vh] flex-col justify-between border-b-4 border-white px-4 py-8 sm:px-8 lg:px-12">
           <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
             <div className="flex flex-wrap gap-3">
-              <span className="inline-block border-2 border-white bg-black px-3 py-1 text-xs font-bold uppercase tracking-wider shadow-brutal-white-sm text-white">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/60 bg-emerald-400/10 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-emerald-400">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
                 Available for Select Projects
               </span>
               <a
@@ -102,9 +105,7 @@ export default function Home() {
               WILSON ALI
             </h1>
             <div className="max-w-3xl">
-              <p className="text-xl font-bold uppercase tracking-tight text-white sm:text-2xl md:text-3xl">
-                Creative AI Solution Building Specialist.
-              </p>
+              <HeroSubtitle />
               <div className="mt-6 flex flex-wrap items-center gap-4">
                 <a
                   href={GITHUB}
@@ -160,7 +161,7 @@ export default function Home() {
                 (item) => (
                   <span
                     key={item}
-                    className="border-2 border-white bg-black px-3 py-1 text-xs font-bold uppercase tracking-wider text-white"
+                    className="rounded-full border border-white/40 bg-white/10 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-white backdrop-blur-sm"
                   >
                     {item}
                   </span>
@@ -330,6 +331,27 @@ export default function Home() {
               </BentoCard>
             ))}
           </div>
+        </section>
+
+        {/* Lego Section */}
+        <section className="border-t-4 border-white bg-black px-4 py-16 sm:px-8 lg:px-12">
+          <div className="mb-8 flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <svg className="h-8 w-8 text-white" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M6.5 3A3.5 3.5 0 0 0 3 6.5v.55A2.5 2.5 0 0 0 1 9.5v5A2.5 2.5 0 0 0 3 17v.5A3.5 3.5 0 0 0 6.5 21h11A3.5 3.5 0 0 0 21 17.5V17a2.5 2.5 0 0 0 2-2.44v-5A2.5 2.5 0 0 0 21 7v-.5A3.5 3.5 0 0 0 17.5 3zm0 2h11A1.5 1.5 0 0 1 19 6.5V7H5v-.5A1.5 1.5 0 0 1 6.5 5M5 9h14a.5.5 0 0 1 .5.5v5a.5.5 0 0 1-.5.5H5a.5.5 0 0 1-.5-.5v-5A.5.5 0 0 1 5 9m1.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m5 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m5 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M5 17h14v.5A1.5 1.5 0 0 1 17.5 19h-11A1.5 1.5 0 0 1 5 17.5z"/>
+              </svg>
+              <TextReveal
+                text="Lego"
+                tag="h2"
+                className="text-3xl font-black uppercase tracking-tight sm:text-4xl md:text-5xl"
+              />
+            </div>
+            <span className="hidden h-4 flex-1 border-b-4 border-white sm:ml-6 sm:block" />
+          </div>
+          <p className="mb-8 max-w-3xl text-lg font-medium text-white/80">
+            Building worlds one brick at a time. Follow the builds on Instagram.
+          </p>
+          <LegoSection />
         </section>
 
         {/* Contact Marquee */}

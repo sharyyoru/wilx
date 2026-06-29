@@ -67,14 +67,16 @@ const fragmentShaderSource = `
 
     vec4 color = texture2D(u_image, uv);
     float gray = dot(color.rgb, vec3(0.299, 0.587, 0.114));
+    // Compress into a dark range so dither pixels are dim, not full white
+    float darkened = gray * 0.45;
 
     vec2 mouseUV = u_mouse / u_resolution;
     float dist = distance(v_texCoord, mouseUV);
-    float mouseGlow = smoothstep(0.4, 0.0, dist) * 0.25;
+    float mouseGlow = smoothstep(0.4, 0.0, dist) * 0.3;
     float ripple = sin(dist * 18.0 - u_time * 2.5) * 0.04 * smoothstep(0.5, 0.0, dist);
 
     float threshold = bayer4(gl_FragCoord.xy) - mouseGlow + ripple;
-    float dithered = step(threshold, gray);
+    float dithered = step(threshold, darkened);
 
     gl_FragColor = vec4(vec3(dithered), 1.0);
   }
@@ -300,7 +302,7 @@ export function DitherShaderBackground({
         mouseRef.current.y
       );
       gl.uniform1f(uniformsRef.current.u_time, time);
-      gl.uniform1f(uniformsRef.current.u_gridSize, 4.0);
+      gl.uniform1f(uniformsRef.current.u_gridSize, 6.0);
 
       gl.drawArrays(gl.TRIANGLES, 0, 6);
       rafRef.current = requestAnimationFrame(render);
@@ -347,9 +349,16 @@ export function DitherShaderBackground({
           pointerEvents: "none",
         }}
       />
-      <div className="fixed bottom-4 right-4 z-50 rounded bg-black px-2 py-1 text-xs font-mono text-white">
-        {ready ? "webgl ready" : "webgl not ready"}
-      </div>
+      {/* Legibility overlay: dark gradient on the left where text lives */}
+      <div
+        className={`fixed inset-0 z-0 ${className}`}
+        aria-hidden="true"
+        style={{
+          background:
+            "linear-gradient(to right, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.55) 40%, rgba(0,0,0,0.15) 70%, rgba(0,0,0,0.0) 100%)",
+          pointerEvents: "none",
+        }}
+      />
     </>
   );
 }
